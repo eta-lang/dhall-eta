@@ -20,12 +20,19 @@ source-repository this
                                           
 library
   exposed-modules:     Dhall.Eta    
-  -- other-modules:       
-  build-depends:       base >=4.8 && <4.9
-                     , dhall >= 1.15.0 && < 1.16 
-  hs-source-dirs:      src
+  build-depends:       base  >=4.8 && <4.9
+                     , dhall >= 1.15.0 && < 1.16
+                     , text  >= 0.11.1.0 && < 1.3
+  hs-source-dirs:      src/main/eta
   default-language:    Haskell2010
   default-extensions:  OverloadedStrings
                        DataKinds
                        TypeOperators
                        FlexibleContexts
+
+executable dhall-eta-example
+  main-is:             Main.hs
+  build-depends:       base >=4.8 && < 4.9
+                     , dhall-eta
+  hs-source-dirs:      src/main/eta/examples
+  default-language:    Haskell2010
