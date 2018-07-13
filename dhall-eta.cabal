@@ -1,0 +1,31 @@
+name:                dhall-eta
+version:             0.1.0
+synopsis:            A wrapper of dhall-haskell to provide a friendly java api over dhall 
+homepage:            https://github.com/eta-lang/dhall-eta
+bug-reports:         https://github.com/eta-lang/dhall-eta/issues
+license:             BSD3
+license-file:        LICENSE
+author:              Javier Neira Sanchez <atreyu.bbb@gmail.com>
+maintainer:          atreyu.bbb@gmail.com
+category:            Language
+build-type:          Simple
+extra-source-files:  README.md
+cabal-version:       1.12
+stability:           Experimental
+
+source-repository this
+  type:              git
+  location:          https://github.com/eta-lang/dhall-eta
+  tag:               0.1.0
+                                          
+library
+  exposed-modules:     Dhall.Eta    
+  -- other-modules:       
+  build-depends:       base >=4.8 && <4.9
+                     , dhall >= 1.15.0 && < 1.16 
+  hs-source-dirs:      src
+  default-language:    Haskell2010
+  default-extensions:  OverloadedStrings
+                       DataKinds
+                       TypeOperators
+                       FlexibleContexts
