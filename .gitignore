@@ -1,6 +1,5 @@
 dist
 dist-*
-cabal-dev
 *.o
 *.hi
 *.chi
@@ -9,8 +8,8 @@ cabal-dev
 *.dyn_hi
 .hpc
 .hsenv
-.cabal-sandbox/
-cabal.sandbox.config
+.etlas-sandbox/
+etlas.sandbox.config
 *.prof
 *.aux
 *.hp
@@ -19,4 +18,4 @@ cabal.sandbox.config
 cabal.project.local
 cabal.project.local~
 .HTF/
-.ghc.environment.*
+.eta.environment.*
