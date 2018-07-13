@@ -8,6 +8,12 @@ public class Client {
         System.out.println("Testing dhall");
         System.out.println(Input.bool("True"));
         System.out.println(Input.bool("True && False"));
+        try {
+            System.out.println(Input.bool("1"));
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+        System.out.println("The end");
     }
     
 }
