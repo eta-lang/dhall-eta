@@ -1,0 +1,2 @@
+include 'examples'
+rootProject.name = 'dhall-eta'

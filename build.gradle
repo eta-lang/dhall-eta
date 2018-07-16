@@ -1,0 +1,36 @@
+plugins {
+    id 'com.typelead.eta' version '0.7.5'
+    id 'application'
+}
+
+repositories {
+  mavenCentral()
+}
+
+eta {
+  // version = '0.8.0b2'
+  useSystemEta = true
+  // etlasVersion = '1.4.0.0'
+  useSystemEtlas = true
+}
+
+compileEta {
+   options {
+     args = ['-Werror','-Wall']
+     extensions {
+       OverloadedStrings
+       DataKinds
+       TypeOperators
+       FlexibleContexts
+     }
+  }
+}
+
+project.version = '0.1.0'
+
+dependencies {
+  compile ('org.bouncycastle:bcprov-jdk15on:1.59')
+  compile eta('base:[4.8,4.9[')
+  compile eta('text:[0.11.1,1.13[')
+  compile eta('dhall:[1.15.0,1.16[')
+}

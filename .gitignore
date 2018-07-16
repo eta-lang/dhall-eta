@@ -1,5 +1,6 @@
 dist
 dist-*
+build
 *.o
 *.hi
 *.chi
@@ -15,6 +16,7 @@ etlas.sandbox.config
 *.hp
 *.eventlog
 .stack-work/
+.gradle/
 cabal.project.local
 cabal.project.local~
 .HTF/

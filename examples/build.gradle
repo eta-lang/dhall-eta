@@ -1,0 +1,8 @@
+plugins {
+  id 'application'
+}
+ mainClassName = 'org.dhall.eta.example.Client'
+
+dependencies {
+  compile rootProject
+}

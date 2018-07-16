@@ -34,5 +34,5 @@ executable dhall-eta-example
   main-is:             Main.hs
   build-depends:       base >=4.8 && < 4.9
                      , dhall-eta
-  hs-source-dirs:      src/main/eta/examples
+  hs-source-dirs:      examples/src/main/eta
   default-language:    Haskell2010
