@@ -8,19 +8,19 @@ import Java
 input :: Dhall.Type a ->  JString -> IO a
 input ty = ( Dhall.input ty ) . Text.pack . fromJava
 
-autoInput :: Dhall.Interpret a => JString -> IO a
-autoInput = input Dhall.auto
-
-foreign export java "@static org.dhall.eta.Input.bool" autoInput
+foreign export java "@static org.dhall.eta.Input.bool" bool
   :: JString -> IO Bool
+bool = input Dhall.bool
 
-foreign export java "@static org.dhall.eta.Input.str" autoInput
-  :: JString -> IO String
+foreign export java "@static org.dhall.eta.Input.str" str
+  :: JString -> IO JString
+str = fmap toJava . input Dhall.string
 
-foreign export java "@static org.dhall.eta.Input.integral" autoInput
-  :: JString -> IO Integer
+foreign export java "@static org.dhall.eta.Input.integer" integer
+  :: JString -> IO JInteger
+integer = fmap toJava . input Dhall.integer
 
 foreign export java "@static org.dhall.eta.Input.natural" natural
-  :: JString -> IO Integer
-natural = ( fmap toInteger ) . ( input Dhall.natural )
+  :: JString -> IO JInteger
+natural = fmap ( toJava . toInteger ) . input Dhall.natural
 

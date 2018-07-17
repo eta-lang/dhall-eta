@@ -13,6 +13,9 @@ public class Client {
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
         }
+        System.out.println(Input.str("let str=\"dhall\" in \"Hello ${str}\""));
+        System.out.println(Input.integer("+1234567"));
+        System.out.println(Input.natural("2 * 3 + 4"));
         System.out.println("The end");
     }
     
