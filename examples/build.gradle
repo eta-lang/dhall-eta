@@ -4,5 +4,6 @@ plugins {
  mainClassName = 'org.dhall.eta.example.Client'
 
 dependencies {
+  compile ('org.bouncycastle:bcprov-jdk15on:1.59')
   compile rootProject
 }

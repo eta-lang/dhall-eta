@@ -1,4 +1,6 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Main where
+import Dhall.Eta.Parser
 
-
-main = return ()
+main :: IO ()
+main = putStrLn $ show $ exprFromText "main" "1" 

@@ -22,3 +22,8 @@ cabal.project.local~
 .HTF/
 .eta.environment.*
 *.class
+*.classpath
+*.settings
+*.project
+bin
+lib

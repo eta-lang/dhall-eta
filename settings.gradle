@@ -1,2 +1,2 @@
-include 'examples'
+include 'java', 'examples'
 rootProject.name = 'dhall-eta'

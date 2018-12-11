@@ -1,0 +1,48 @@
+defaults: &defaults
+  docker:
+      - image: typelead/eta:latest
+version: 2.1
+jobs:
+  build:
+    <<: *defaults
+
+    steps:
+    - checkout
+
+    - restore_cache:
+        key: dhall-eta-etlas-v1600-cache-
+
+    - run: etlas update
+
+    - run: etlas install
+
+    - save_cache:
+        key: dhall-eta-etlas-v1600-cache-{{ epoch }}
+        paths:
+          - "~/.etlas/config"
+          - "~/.etlas/packages"
+          - "~/.etlas/store"
+          - "~/.etlas/tools"
+  test:
+    <<: *defaults
+
+    steps:
+      - restore_cache:
+        key: dhall-eta-etlas-v1600-cache-
+
+      - run: etlas build --enable-tests
+
+      - run:
+          name: Running tests
+          command: etlas test
+      
+      
+workflows:
+  version: 2
+  full_cycle:
+    jobs:
+      - build
+
+      - test:
+          requires:
+            - build
