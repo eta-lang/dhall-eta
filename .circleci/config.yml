@@ -45,13 +45,14 @@ jobs:
       - save_cache:
           key: dhall-eta-cache-{{ epoch }}
           paths:
-          - "~/.etlas/config"
-          - "~/.etlas/packages"
-          - "~/.etlas/store"
-          - "~/.etlas/tools"
+            - "~/.etlas/config"
+            - "~/.etlas/packages"
+            - "~/.etlas/store"
+            - "~/.etlas/tools"
+            
       - run:
           name: Getting dhall-lang tests
-          command: git clone https://github.com/dhall-lang/dhall-lang.git
+          command: git clone https://github.com/dhall-lang/dhall-lang.git ../dhall-lang
       - run:
           name: Running tests
           command: etlas test
