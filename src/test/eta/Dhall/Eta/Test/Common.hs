@@ -21,7 +21,7 @@ import Eta.Types
 import Java
 
 dhallCasesBasePath :: FilePath
-dhallCasesBasePath = "../dhall-haskell/dhall/tests"
+dhallCasesBasePath = "../dhall-lang/tests"
 
 parseOrThrow :: Text
              -> IO ( Dhall.Expr Dhall.Src Dhall.Import, JExpr JSrc JImport )
