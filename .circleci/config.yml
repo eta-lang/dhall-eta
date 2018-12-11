@@ -12,6 +12,8 @@ jobs:
     - restore_cache:
         key: dhall-eta-etlas-v1600-cache-
 
+    - run: mv etlas.dhall etlas.dhall.skip
+      
     - run: etlas update
 
     - run: etlas install
