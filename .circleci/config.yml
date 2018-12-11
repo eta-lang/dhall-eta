@@ -16,7 +16,7 @@ jobs:
       
     - run: etlas update
 
-    - run: etlas install
+    - run: etlas build
 
     - save_cache:
         key: dhall-eta-etlas-v1600-cache-{{ epoch }}
@@ -30,7 +30,7 @@ jobs:
 
     steps:
       - restore_cache:
-        key: dhall-eta-etlas-v1600-cache-
+          key: dhall-eta-etlas-v1600-cache-
 
       - run: etlas build --enable-tests
 
