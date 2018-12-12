@@ -10,7 +10,7 @@ jobs:
     - checkout
 
     - restore_cache:
-        key: dhall-eta-cache-
+        key: dhall-eta-cache-v1-
 
     - run: mv etlas.dhall etlas.dhall.skip
       
@@ -19,7 +19,7 @@ jobs:
     - run: etlas build
 
     - save_cache:
-        key: dhall-eta-cache-{{ epoch }}
+        key: dhall-eta-cache-v1-{{ epoch }}
         paths:
           - "~/.etlas/config"
           - "~/.etlas/packages"
@@ -38,12 +38,12 @@ jobs:
           at: .
       
       - restore_cache:
-          key: dhall-eta-cache-
+          key: dhall-eta-cache-v1-
 
       - run: etlas build --enable-tests
 
       - save_cache:
-          key: dhall-eta-cache-{{ epoch }}
+          key: dhall-eta-cache-v1-{{ epoch }}
           paths:
             - "~/.etlas/config"
             - "~/.etlas/packages"
