@@ -12,7 +12,8 @@ jobs:
     - restore_cache:
         key: dhall-eta-cache-v1-
 
-    - run: mv etlas.dhall etlas.dhall.skip
+    # - run: mv etlas.dhall etlas.dhall.skip
+    - run: ls /etc/protocols
       
     - run: etlas update
 
