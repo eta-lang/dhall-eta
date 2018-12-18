@@ -53,7 +53,7 @@ jobs:
           command: git clone https://github.com/dhall-lang/dhall-lang.git ../dhall-lang
       - run:
           name: Running tests
-          command: etlas test
+          command: ./dist/build/eta-0.8.6.3/dhall-eta-0.1.0/t/tasty/build/tasty/tasty
       
       
 workflows:
