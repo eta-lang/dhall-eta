@@ -35,11 +35,13 @@ jobs:
       - attach_workspace:
           at: .
       
-      - run: etlas build --enable-tests
+      - run:
+          name: Building tests
+          command: etlas build --enable-tests
 
       - run:
           name: Getting dhall-lang tests
-          command: git clone https://github.com/dhall-lang/dhall-lang.git ../dhall-lang
+          command: git clone --branch v$DHALL_STANDARD_VERSION --depth=1 https://github.com/dhall-lang/dhall-lang.git ../dhall-lang
       - run:
           name: Running tests
           command: ./dist/build/eta-0.8.6.3/dhall-eta-0.1.0/t/tasty/build/tasty/tasty
