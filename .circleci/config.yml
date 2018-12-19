@@ -17,12 +17,12 @@ jobs:
     - run: etlas build
 
     - save_cache:
-        key: dhall-eta-cache-v1-{{ epoch }}
+        key: dhall-eta-cache-v2-{{ epoch }}
         paths:
           - "~/.etlas/config"
           - "~/.etlas/packages"
-          - "~/.etlas/store"
           - "~/.etlas/tools"
+          - "~/.coursier"
 
     - persist_to_workspace:
           root: .
@@ -35,19 +35,8 @@ jobs:
       - attach_workspace:
           at: .
       
-      - restore_cache:
-          key: dhall-eta-cache-v1-
-
       - run: etlas build --enable-tests
 
-      - save_cache:
-          key: dhall-eta-cache-v1-{{ epoch }}
-          paths:
-            - "~/.etlas/config"
-            - "~/.etlas/packages"
-            - "~/.etlas/store"
-            - "~/.etlas/tools"
-            
       - run:
           name: Getting dhall-lang tests
           command: git clone https://github.com/dhall-lang/dhall-lang.git ../dhall-lang
