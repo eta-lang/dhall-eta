@@ -1,7 +1,7 @@
 defaults: &defaults
   docker:
       - image: typelead/eta:latest
-version: 2.1
+version: 2.0
 jobs:
   build:
     <<: *defaults
@@ -10,7 +10,7 @@ jobs:
     - checkout
 
     - restore_cache:
-        key: dhall-eta-cache-v1-
+        key: dhall-eta-cache-v2-
 
     - run: etlas update
 
@@ -34,7 +34,10 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      
+
+      - restore_cache:
+          key: dhall-eta-cache-v2-
+
       - run:
           name: Building tests
           command: etlas build --enable-tests
@@ -45,6 +48,7 @@ jobs:
       - run:
           name: Running tests
           command: ./dist/build/eta-0.8.6.3/dhall-eta-0.1.0/t/tasty/build/tasty/tasty
+          no_output_timeout: 30m
       
       
 workflows:
