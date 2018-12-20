@@ -63,8 +63,9 @@ shouldImportAndBeEqualRelative ( path, txt ) =
            fail $ "Dhall import succeded but Dhall.Eta one didn't. Dhall.Eta exception: "
                ++ show jex
          (Right expr, Right jexpr) ->
-           if expr == fromJava jexpr then return ()
-           else fail $ "Importing is not equal between Dhall and Dhall.Eta."
+           assertEqual
+            ( "Importing is not equal between Dhall and Dhall.Eta." )
+            expr ( fromJava jexpr )
   )
 
 relativeDir :: FilePath -> FilePath

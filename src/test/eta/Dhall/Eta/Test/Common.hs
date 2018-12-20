@@ -16,6 +16,7 @@ import Data.Text ( Text )
 
 import Dhall.Eta.Core.Java
 import Dhall.Eta.Parser.Java
+import Dhall.Eta.TypeCheck.Java
 
 import Eta.Types
 import Java
@@ -24,6 +25,13 @@ import System.FilePath (takeBaseName)
 
 dhallCasesBasePath :: FilePath
 dhallCasesBasePath = "../dhall-lang/tests"
+
+skipTest :: FilePath -> Bool
+skipTest path =
+  takeBaseName path `elem` [ "annotation"
+                           , "missingSpace"
+                           , "spaceAfterListAppend"
+                           ]
 
 parseOrThrow :: Text
              -> IO ( Dhall.Expr Dhall.Src Dhall.Import, JExpr JSrc JImport )
@@ -78,9 +86,12 @@ resolveRelativeOrThrow dir exprs = do
   liftM2 (,) ( getOrThrow eResExpr ) ( getOrThrow jeResExpr )
   where getOrThrow = either throwIO return 
 
-skipTest :: FilePath -> Bool
-skipTest path =
-  takeBaseName path `elem` [ "annotation"
-                           , "missingSpace"
-                           , "spaceAfterListAppend"
-                           ]
+typeOf :: ( Dhall.Expr Dhall.Src Dhall.X
+          , JExpr JSrc JX
+          )
+       -> ( Either ( Dhall.TypeError Dhall.Src Dhall.X )
+                   ( Dhall.Expr Dhall.Src Dhall.X )
+          , JEither ( JTypeError JSrc JX )
+                    ( JExpr JSrc JX )
+          )
+typeOf = undefined

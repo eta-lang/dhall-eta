@@ -100,5 +100,6 @@ test-suite  tasty
         Dhall.Eta.Test.Import
         Dhall.Eta.Test.Normalization
         Dhall.Eta.Test.Parser
+        Dhall.Eta.Test.TypeCheck
     ghc-options: -Wall -fno-warn-safe -fno-warn-unsafe -fno-warn-implicit-prelude -fno-warn-missing-import-lists -fno-warn-missing-local-sigs -fno-warn-monomorphism-restriction -fno-warn-name-shadowing
 

@@ -208,6 +208,7 @@ in    prelude.utils.GitHub-project { owner = "eta-lang", repo = "dhall-eta" }
                     , "Dhall.Eta.Test.Import"
                     , "Dhall.Eta.Test.Normalization"
                     , "Dhall.Eta.Test.Parser"
+                    , "Dhall.Eta.Test.TypeCheck"
                     ]
                 , default-language =
                     Haskell2010
