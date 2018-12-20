@@ -18,7 +18,7 @@ jobs:
     - run: etlas build
 
     - save_cache:
-        key: dhall-eta-cache-v2-{{ epoch }}
+        key: dhall-eta-cache-v2-{{ checksum "etlas.dhall" }}
         paths:
           - "~/.etlas/config"
           - "~/.etlas/packages"
