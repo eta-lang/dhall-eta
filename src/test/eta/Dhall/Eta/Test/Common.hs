@@ -20,6 +20,8 @@ import Dhall.Eta.Parser.Java
 import Eta.Types
 import Java
 
+import System.FilePath (takeBaseName)
+
 dhallCasesBasePath :: FilePath
 dhallCasesBasePath = "../dhall-lang/tests"
 
@@ -75,3 +77,10 @@ resolveRelativeOrThrow dir exprs = do
   ( eResExpr, jeResExpr ) <- resolveRelative dir exprs
   liftM2 (,) ( getOrThrow eResExpr ) ( getOrThrow jeResExpr )
   where getOrThrow = either throwIO return 
+
+skipTest :: FilePath -> Bool
+skipTest path =
+  takeBaseName path `elem` [ "annotation"
+                           , "missingSpace"
+                           , "spaceAfterListAppend"
+                           ]

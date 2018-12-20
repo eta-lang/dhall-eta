@@ -12,7 +12,7 @@ import qualified Data.Text.IO as Text
 import Control.Monad (forM, when)
 import Data.List (partition)
 import Data.Text (Text)
-import Dhall.Eta.Test.Common (dhallCasesBasePath)
+import Dhall.Eta.Test.Common (dhallCasesBasePath, skipTest)
 import System.Directory (listDirectory, doesFileExist, doesDirectoryExist)
 import System.FilePath (takeExtension, takeBaseName, (</>))
 import Test.Tasty
@@ -42,8 +42,9 @@ readDhallParseCases = do
   oks <- readDhallCases $ "parser" </> "success"
   kos <- readDhallCases $ "parser" </> "failure"
   let isCaseA = (== 'A') . last . takeBaseName . fst
-      oksA = filter isCaseA oks 
-  return (oksA, kos)
+      oksA = filter isCaseA oks
+      kos' = filter (not . skipTest . fst) kos
+  return (oksA, kos')
 
 readDhallImportCases :: IO (([(FilePath, Text)], [(FilePath,Text)])
                            , [(FilePath, Text)])
@@ -84,3 +85,4 @@ traverseDir top include = do
       else return ( if isFile && include path
                     then [path] else [] )        
   return (concat paths)
+
