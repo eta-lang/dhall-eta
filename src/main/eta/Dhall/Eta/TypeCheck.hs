@@ -5,6 +5,7 @@ module Dhall.Eta.TypeCheck (
     -- * Type-checking
       typeWith
     , typeOf
+    , typeOfResolved
 --    , typeWithA
     , checkContext
 
@@ -56,12 +57,12 @@ typeOf :: forall proxy s js. (Class js, JavaConverter s js)
 typeOf _ jexpr = deepToJava $ Dhall.typeOf expr
   where expr :: Dhall.Expr s Dhall.X = fromJava jexpr
 
-jtypeOf :: JExpr JSrc JX -> JEither (JTypeError JSrc JX) (JExpr JSrc JX)
-jtypeOf = typeOf _Src
+typeOfResolved :: JExpr JSrc JX -> JEither (JTypeError JSrc JX) (JExpr JSrc JX)
+typeOfResolved = typeOf _Src
 
-foreign export java "@static org.dhall.eta.TypeCheck.typeOf"
-  jtypeOf :: JExpr JSrc JX
-          -> JEither (JTypeError JSrc JX) (JExpr JSrc JX)
+foreign export java "@static org.dhall.eta.TypeCheck.typeOfResolved"
+  typeOfResolved :: JExpr JSrc JX
+                 -> JEither (JTypeError JSrc JX) (JExpr JSrc JX)
   
 checkContext :: forall proxy s js. (Class js, JavaConverter s js)
              => proxy s -> JContext (JExpr js JX)

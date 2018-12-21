@@ -3,6 +3,7 @@ module Main where
 import qualified Dhall.Eta.Test.Parser as Parser
 import qualified Dhall.Eta.Test.Import as Import
 import qualified Dhall.Eta.Test.Normalization as Normalization
+import qualified Dhall.Eta.Test.TypeCheck as TypeCheck
 
 import qualified GHC.IO.Encoding
 import qualified System.IO
@@ -12,7 +13,7 @@ import qualified Data.Text.IO as Text
 import Control.Monad (forM, when)
 import Data.List (partition)
 import Data.Text (Text)
-import Dhall.Eta.Test.Common (dhallCasesBasePath, skipTest)
+import Dhall.Eta.Test.Common (dhallCasesBasePath, selfCasesBasePath, skipTest)
 import System.Directory (listDirectory, doesFileExist, doesDirectoryExist)
 import System.FilePath (takeExtension, takeBaseName, (</>))
 import Test.Tasty
@@ -21,24 +22,28 @@ import Test.Tasty
 allTests :: ([(FilePath, Text)],[(FilePath, Text)])
          -> (([(FilePath, Text)], [(FilePath,Text)]), [(FilePath, Text)])
          -> [(FilePath, Text)]
+         -> ([(FilePath, Text)],[(FilePath, Text)])
          -> TestTree
-allTests parseCases importCases normalizationCases =
+allTests parseCases importCases normalizationCases typeCheckCases =
   testGroup "dhall-eta tests"
       [ Parser.tests parseCases
       , Import.tests importCases
       , Normalization.tests normalizationCases
+      , TypeCheck.tests typeCheckCases
       ]
 
 main :: IO ()
 main = do
   GHC.IO.Encoding.setLocaleEncoding System.IO.utf8
-  dhallParseCases <- readDhallParseCases
-  dhallImportCases <- readDhallImportCases
-  dhallNormalCases <- readDhallNormalizationCases
-  defaultMain $ allTests dhallParseCases dhallImportCases dhallNormalCases
+  parseCases <- readParseCases
+  importCases <- readImportCases
+  normalCases <- readNormalizationCases
+  typeCheckCases <- readTypeCheckCases
+  defaultMain $ allTests parseCases importCases
+                         normalCases typeCheckCases
 
-readDhallParseCases :: IO ([(FilePath, Text)], [(FilePath, Text)])
-readDhallParseCases = do
+readParseCases :: IO ([(FilePath, Text)], [(FilePath, Text)])
+readParseCases = do
   oks <- readDhallCases $ "parser" </> "success"
   kos <- readDhallCases $ "parser" </> "failure"
   let isCaseA = (== 'A') . last . takeBaseName . fst
@@ -46,23 +51,35 @@ readDhallParseCases = do
       kos' = filter (not . skipTest . fst) kos
   return (oksA, kos')
 
-readDhallImportCases :: IO (([(FilePath, Text)], [(FilePath,Text)])
+readImportCases :: IO (([(FilePath, Text)], [(FilePath,Text)])
                            , [(FilePath, Text)])
-readDhallImportCases = do
+readImportCases = do
   ok <- readDhallCases $ "import" </> "success"
   ko <- readDhallCases $ "import" </> "failure"
-  let (rel,abs) = partition isRelative ok
+  ok' <- readSelfCases $ "import" </> "success"
+  let (rel,abs) = partition isRelative ( ok ++ ok' )
   return ((abs,rel),ko)
   where isRelative (path,_) = takeBaseName path  `elem` relativeCases
         relativeCases = ["relative", "fieldOrderA", "issue553B" ]
 
-readDhallNormalizationCases :: IO [(FilePath, Text)]
-readDhallNormalizationCases =
+readNormalizationCases :: IO [(FilePath, Text)]
+readNormalizationCases =
   readDhallCases $ "normalization" </> "success"
 
+readTypeCheckCases :: IO ([(FilePath, Text)], [(FilePath, Text)])
+readTypeCheckCases = do
+  oks <- readDhallCases $ "typecheck" </> "success"
+  kos <- readDhallCases $ "typecheck" </> "failure"
+  return (oks, kos)
+
 readDhallCases :: FilePath -> IO [(FilePath, Text)]
-readDhallCases relDir = do
-  let dir = dhallCasesBasePath </> relDir
+readDhallCases relDir = readCases $ dhallCasesBasePath </> relDir
+
+readSelfCases :: FilePath -> IO [(FilePath, Text)]
+readSelfCases relDir = readCases $ selfCasesBasePath </> relDir
+
+readCases :: FilePath -> IO [(FilePath, Text)]
+readCases dir = do
   exists <- doesDirectoryExist dir
   when (not exists) $
     error $ "Dhall haskell tests cases dir not exist: " ++ dir

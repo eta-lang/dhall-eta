@@ -39,13 +39,20 @@ parseShouldBeEqual successAssert errorAssert ( path, txt ) =
   ( do
       let eExpr = Dhall.exprFromText "" txt
           ejExpr = Dhall.Eta.exprFromText "" ( toJava txt )
-          isJParseSuccess = ejExpr `instanceOf` getClass (Proxy :: Proxy (JRight a b))
-          jexpr = jrightValue $ ((unsafeCast ejExpr) :: JRight JParseError (JExpr JSrc JImport))
+          isJParseSuccess =
+            ejExpr `instanceOf` getClass (Proxy :: Proxy (JRight a b))
+          jexpr =
+            jrightValue $ ((unsafeCast ejExpr)
+                            :: JRight JParseError (JExpr JSrc JImport))
       case (eExpr, isJParseSuccess) of
-        (Left  _,    False) -> errorAssert
-        (Left  _,    True)  -> fail "Dhall parsing failed but Dhall.Eta one didn't."
-        (Right _,    False) -> fail "Dhall parsing succeded but Dhall.Eta one didn't."
-        (Right expr, True)  -> successAssert >>
+        (Left  _,    False) ->
+          errorAssert
+        (Left  _,    True)  ->
+          fail "Dhall parsing failed but Dhall.Eta one didn't."
+        (Right _,    False) ->
+          fail "Dhall parsing succeded but Dhall.Eta one didn't."
+        (Right expr, True)  ->
+          successAssert >>
           assertEqual
             ( "Parsing is not equal between Dhall and Dhall.Eta." )
             expr ( fromJava jexpr )

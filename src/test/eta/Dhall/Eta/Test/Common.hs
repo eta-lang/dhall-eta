@@ -9,9 +9,11 @@ import qualified Dhall.TypeCheck as Dhall
 
 import qualified Dhall.Eta.Parser as Dhall.Eta
 import qualified Dhall.Eta.Import as Dhall.Eta
+import qualified Dhall.Eta.TypeCheck as Dhall.Eta
 
 import Control.Monad (liftM2)
 import Control.Exception
+import Data.Bifunctor (bimap)
 import Data.Text ( Text )
 
 import Dhall.Eta.Core.Java
@@ -25,6 +27,9 @@ import System.FilePath (takeBaseName)
 
 dhallCasesBasePath :: FilePath
 dhallCasesBasePath = "../dhall-lang/tests"
+
+selfCasesBasePath :: FilePath
+selfCasesBasePath = "src/test/resources"
 
 skipTest :: FilePath -> Bool
 skipTest path =
@@ -47,7 +52,7 @@ resolve :: ( Dhall.Expr Dhall.Src Dhall.Import, JExpr JSrc JImport )
         -> IO ( Either SomeException ( Dhall.Expr Dhall.Src Dhall.X )
               , Either SomeException ( JExpr JSrc JX )
               )
-resolve ( expr, jexpr ) =
+resolve ( expr, jexpr ) = 
   liftM2 (,)
     ( ( try $ Dhall.load expr )
       :: IO ( Either SomeException ( Dhall.Expr Dhall.Src Dhall.X ) ) )
@@ -86,12 +91,10 @@ resolveRelativeOrThrow dir exprs = do
   liftM2 (,) ( getOrThrow eResExpr ) ( getOrThrow jeResExpr )
   where getOrThrow = either throwIO return 
 
-typeOf :: ( Dhall.Expr Dhall.Src Dhall.X
-          , JExpr JSrc JX
-          )
+typeOf :: ( Dhall.Expr Dhall.Src Dhall.X, JExpr JSrc JX )
        -> ( Either ( Dhall.TypeError Dhall.Src Dhall.X )
                    ( Dhall.Expr Dhall.Src Dhall.X )
           , JEither ( JTypeError JSrc JX )
                     ( JExpr JSrc JX )
           )
-typeOf = undefined
+typeOf = bimap Dhall.typeOf Dhall.Eta.typeOfResolved

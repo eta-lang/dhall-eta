@@ -42,7 +42,7 @@ typeCheckShouldBeEqual successAssert errorAssert ( path, txt ) =
   testCase ( "Type checking " ++ takeBaseName path )
   ( do
       (expr, jexpr) <- parseOrThrow txt
-      (rexpr, rjexpr) <- resolveOrThrow (expr, jexpr)
+      (rexpr, rjexpr) <- resolveRelativeOrThrow path (expr, jexpr)
       let (texpr, tjexpr) = typeOf (rexpr, rjexpr)
           isJTypeCheckingSuccess =
             tjexpr `instanceOf` getClass (Proxy :: Proxy (JRight a b))
@@ -51,14 +51,17 @@ typeCheckShouldBeEqual successAssert errorAssert ( path, txt ) =
                            :: JRight (JTypeError JSrc JX) (JExpr JSrc JX))
 
       case (texpr, isJTypeCheckingSuccess) of
-        (Left  _,    False)      -> errorAssert
-        (Left  _,    True)     -> fail "Dhall type checking failed but Dhall.Eta one didn't."
-        (Right _,    False)      -> fail "Dhall type checking succeded but Dhall.Eta one didn't."
-        (Right expr, True) -> successAssert >>
+        (Left  _,    False) ->
+          errorAssert
+        (Left  _,    True)  ->
+          fail "Dhall type checking failed but Dhall.Eta one didn't."
+        (Right _,    False) ->
+          fail "Dhall type checking succeded but Dhall.Eta one didn't."
+        (Right expr, True)  ->
+          successAssert >>
           assertEqual
             ( "Type checking is not equal between Dhall and Dhall.Eta." )
             expr ( fromJava jexpr )
-          
   )
 
 
