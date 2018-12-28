@@ -117,6 +117,7 @@ java/src/main/java/org/dhall/typecheck/message/AnnotatedExpressionMismatchMessag
 java/src/main/java/org/dhall/typecheck/message/AnnotatedNameMessage.java
 java/src/main/java/org/dhall/typecheck/message/AnnotationMessage.java
 java/src/main/java/org/dhall/typecheck/message/AnnotMismatch.java
+java/src/main/java/org/dhall/typecheck/message/CantAccess.java
 java/src/main/java/org/dhall/typecheck/message/CantAdd.java
 java/src/main/java/org/dhall/typecheck/message/CantAnd.java
 java/src/main/java/org/dhall/typecheck/message/CantEQ.java
@@ -125,6 +126,7 @@ java/src/main/java/org/dhall/typecheck/message/CantListAppend.java
 java/src/main/java/org/dhall/typecheck/message/CantMultiply.java
 java/src/main/java/org/dhall/typecheck/message/CantNE.java
 java/src/main/java/org/dhall/typecheck/message/CantOr.java
+java/src/main/java/org/dhall/typecheck/message/CantProject.java
 java/src/main/java/org/dhall/typecheck/message/CantTextAppend.java
 java/src/main/java/org/dhall/typecheck/message/CombineTypesRequiresRecordType.java
 java/src/main/java/org/dhall/typecheck/message/ConstructorsRequiresAUnionType.java
