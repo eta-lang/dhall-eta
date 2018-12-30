@@ -63,19 +63,19 @@ public class Client {
         System.out.println(Core.pretty(parsedFun));
         System.out.println("-----------------------------");
         
-        Expr<Void,Import> norm = Core.normalize(parsedFun);
+        Expr<Void,Import> norm = Core.normalizeUnresolved(parsedFun);
         System.out.println("Normalize fun");
         System.out.println(norm);
         System.out.println("-----------------------------");
         
-        Expr<Void,Import> alphaNorm = Core.alphaNormalize(norm);
+        Expr<Void,Import> alphaNorm = Core.alphaNormalizeUnresolved(norm);
         System.out.println("Alpha normalize fun");
         System.out.println(alphaNorm);
         System.out.println("-----------------------------");
         
         Expr<Src,Void> importedExpr = new ExprIntegerShow<>();
         Either<TypeError<Src, Void>,Expr<Src,Void>> checked = 
-            TypeCheck.typeOf(importedExpr);
+            TypeCheck.typeOfResolved(importedExpr);
         System.out.println("Type of ExprIntegerShow");
         System.out.println(checked);
         System.out.println("-----------------------------");
@@ -97,7 +97,7 @@ public class Client {
         System.out.println("Imported Pet");
         System.out.println(importedPet);
         Either<TypeError<Src, Void>,Expr<Src,Void>> checkedPet = 
-            TypeCheck.typeOf(importedPet);
+            TypeCheck.typeOfResolved(importedPet);
         System.out.println("Checked Pet");
         System.out.println(checkedPet);
         Expr<Void, Void> normPet = Core.normalizeResolved(importedPet);
