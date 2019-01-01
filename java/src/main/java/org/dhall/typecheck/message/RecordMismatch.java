@@ -12,6 +12,18 @@ public final class RecordMismatch<S,A> extends TypeMessage<S,A> {
 	private final Expr<S,A> record1;
 	private final Expr<S,A> record2;
 	
+	public RecordMismatch(int operation, 
+			Expr<S, A> record1, Expr<S, A> record2,
+			Const record1Const,  Const record2Const) {
+		this((char)operation,record1,record2,record1Const,record2Const);
+	}
+	
+	public RecordMismatch(char operation, 
+			Expr<S, A> record1, Expr<S, A> record2,
+			Const record1Const,  Const record2Const) {
+		this(Character.valueOf(operation),record1,record2,record1Const,record2Const);
+	}
+	
 	public RecordMismatch(Character operation, 
 			Expr<S, A> record1, Expr<S, A> record2,
 			Const record1Const,  Const record2Const) {
