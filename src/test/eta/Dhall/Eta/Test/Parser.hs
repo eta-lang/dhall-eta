@@ -35,7 +35,7 @@ shouldParseAndBeEqual = parseShouldBeEqual succeded failed
         
 parseShouldBeEqual :: Assertion -> Assertion -> (FilePath, Text) -> TestTree
 parseShouldBeEqual successAssert errorAssert ( path, txt ) =
-  testCase ( "Parsing " ++ takeBaseName path )
+  testCase ( takeBaseName path )
   ( do
       let eExpr = Dhall.exprFromText "" txt
           ejExpr = Dhall.Eta.exprFromText "" ( toJava txt )

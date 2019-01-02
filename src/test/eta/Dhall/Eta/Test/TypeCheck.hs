@@ -8,7 +8,7 @@ import Dhall.Eta.TypeCheck.Java
 
 import Dhall.Eta.Test.Common
 
-import System.FilePath (takeBaseName)
+import System.FilePath (makeRelative, takeDirectory, (</>))
 
 import Test.Tasty
 import Test.Tasty.HUnit
@@ -19,7 +19,7 @@ import Java
 tests :: ([(FilePath, Text)], [(FilePath,Text)])
       -> TestTree
 tests (shouldTypeCheckCases, shouldNotTypeCheckCases) =
-  testGroup "Import tests"
+  testGroup "Typecheck tests"
     [ testGroup "Should type check"
       ( map shouldTypeCheckAndBeEqual shouldTypeCheckCases )
     , testGroup "Should NOT type check"
@@ -39,10 +39,10 @@ shouldTypeCheckAndBeEqual = typeCheckShouldBeEqual succeded failed
 typeCheckShouldBeEqual :: Assertion -> Assertion -> (FilePath, Text)
                        -> TestTree
 typeCheckShouldBeEqual successAssert errorAssert ( path, txt ) =
-  testCase ( "Type checking " ++ takeBaseName path )
+  testCase testName
   ( do
       (expr, jexpr) <- parseOrThrow txt
-      (rexpr, rjexpr) <- resolveRelativeOrThrow path (expr, jexpr)
+      (rexpr, rjexpr) <- resolveRelativeOrThrow relDir (expr, jexpr)
       let (texpr, tjexpr) = typeOf (rexpr, rjexpr)
           isJTypeCheckingSuccess =
             tjexpr `instanceOf` getClass (Proxy :: Proxy (JRight a b))
@@ -63,5 +63,6 @@ typeCheckShouldBeEqual successAssert errorAssert ( path, txt ) =
             ( "Type checking is not equal between Dhall and Dhall.Eta." )
             expr ( fromJava jexpr )
   )
-
+  where relDir = takeDirectory path
+        testName = makeRelative ( dhallCasesBasePath </> "typecheck" ) path
 

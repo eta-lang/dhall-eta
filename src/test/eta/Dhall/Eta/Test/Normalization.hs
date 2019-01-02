@@ -7,7 +7,7 @@ import qualified Dhall.Eta.Core as Dhall.Eta
 
 import Data.Text ( Text )
 import Dhall.Eta.Test.Common
-import System.FilePath (takeDirectory, makeRelative)
+import System.FilePath (takeDirectory, makeRelative, (</>))
 
 import Test.Tasty
 import Test.Tasty.HUnit
@@ -31,6 +31,7 @@ shouldNormalizeAndBeEqual (path, txt) = testCase testName $ do
   assertEqual
     ( "Normalization is not equal between Dhall and Dhall.Eta." )
     norm ( fromJava jnorm )
-  where testName = makeRelative dhallCasesBasePath path
+  where testName = makeRelative ( dhallCasesBasePath </> "normalization" )
+                   path
   
 
