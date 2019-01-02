@@ -44,12 +44,10 @@ main = do
 
 readParseCases :: IO ([(FilePath, Text)], [(FilePath, Text)])
 readParseCases = do
-  oks <- readDhallCases $ "parser" </> "success"
-  kos <- readDhallCases $ "parser" </> "failure"
-  let isCaseA = (== 'A') . last . takeBaseName . fst
-      oksA = filter isCaseA oks
-      kos' = filter (not . skipTest . fst) kos
-  return (oksA, kos')
+  let isCaseA = (== 'A') . last . takeBaseName
+  oks <- readDhallCasesPred isCaseA ( "parser" </> "success" )
+  kos <- readDhallCasesPred ( not . skipTest ) ( "parser" </> "failure" )
+  return (oks, kos)
 
 readImportCases :: IO (([(FilePath, Text)], [(FilePath,Text)])
                            , [(FilePath, Text)])
@@ -63,8 +61,9 @@ readImportCases = do
         relativeCases = ["relative", "fieldOrderA", "issue553B" ]
 
 readNormalizationCases :: IO [(FilePath, Text)]
-readNormalizationCases =
-  readDhallCases $ "normalization" </> "success"
+readNormalizationCases = do
+  let isCaseA = (== 'A') . last . takeBaseName
+  readDhallCasesPred isCaseA ( "normalization" </> "success" )
 
 readTypeCheckCases :: IO ([(FilePath, Text)], [(FilePath, Text)])
 readTypeCheckCases = do
@@ -73,17 +72,24 @@ readTypeCheckCases = do
   return (oks, kos)
 
 readDhallCases :: FilePath -> IO [(FilePath, Text)]
-readDhallCases relDir = readCases $ dhallCasesBasePath </> relDir
+readDhallCases relDir =
+  readDhallCasesPred ( const True ) relDir
+
+readDhallCasesPred :: ( FilePath -> Bool ) -> FilePath -> IO [(FilePath, Text)]
+readDhallCasesPred pred relDir =
+  readCases pred ( dhallCasesBasePath </> relDir )
 
 readSelfCases :: FilePath -> IO [(FilePath, Text)]
-readSelfCases relDir = readCases $ selfCasesBasePath </> relDir
+readSelfCases relDir =
+  readCases ( const True ) ( selfCasesBasePath </> relDir )
 
-readCases :: FilePath -> IO [(FilePath, Text)]
-readCases dir = do
+readCases :: ( FilePath -> Bool ) -> FilePath -> IO [(FilePath, Text)]
+readCases pred dir = do
+  let pred' path = takeExtension path == ".dhall" && pred path  
   exists <- doesDirectoryExist dir
   when (not exists) $
     error $ "Dhall haskell tests cases dir not exist: " ++ dir
-  dhallFiles <- traverseDir dir ((== ".dhall") . takeExtension)
+  dhallFiles <- traverseDir dir pred'
   when (null dhallFiles) $
     error $ "Dhall haskell tests cases not found in " ++ dir
   forM dhallFiles $ \ path -> do
