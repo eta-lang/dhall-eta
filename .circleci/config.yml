@@ -49,9 +49,12 @@ jobs:
           command: git clone --branch v$DHALL_STANDARD_VERSION --depth=1 https://github.com/jneira/dhall-lang.git ../dhall-lang
       - run:
           name: Running tests
-          command: ./dist/build/eta-0.8.6.3/dhall-eta-0.1.0/t/tasty/build/tasty/tasty
-      
-      
+          command: |
+            ./dist/build/eta-0.8.6.3/dhall-eta-0.1.0/t/tasty/build/tasty/tasty -p Parser
+            ./dist/build/eta-0.8.6.3/dhall-eta-0.1.0/t/tasty/build/tasty/tasty -p Import
+            ./dist/build/eta-0.8.6.3/dhall-eta-0.1.0/t/tasty/build/tasty/tasty -p Normalizer
+            ./dist/build/eta-0.8.6.3/dhall-eta-0.1.0/t/tasty/build/tasty/tasty -p Typecheck
+            
 workflows:
   version: 2
   full_cycle:
