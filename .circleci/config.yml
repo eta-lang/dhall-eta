@@ -35,7 +35,9 @@ jobs:
 
   test:
     <<: *defaults
-    
+
+    parallelism: 2
+
     steps:
       - attach_workspace:
           at: ~/
@@ -50,7 +52,6 @@ jobs:
       - run:
           name: Running tests
           command: ./dist/build/eta-0.8.6.3/dhall-eta-0.1.0/t/tasty/build/tasty/tasty --hide-successes
-          no_output_timeout: 20m
             
 workflows:
   version: 2
