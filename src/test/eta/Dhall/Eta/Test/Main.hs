@@ -13,9 +13,12 @@ import qualified Data.Text.IO as Text
 import Control.Monad (forM, when)
 import Data.List (partition)
 import Data.Text (Text)
-import Dhall.Eta.Test.Common (dhallCasesBasePath, selfCasesBasePath, skipTest)
-import System.Directory (listDirectory, doesFileExist, doesDirectoryExist)
-import System.FilePath (takeExtension, takeBaseName, (</>))
+import Dhall.Eta.Test.Common
+  (dhallCasesBasePath, selfCasesBasePath, skipTest, isTestCaseA)
+import System.Directory
+  (listDirectory, doesFileExist, doesDirectoryExist)
+import System.FilePath
+  (takeExtension, takeBaseName, (</>))
 import Test.Tasty
 
 
@@ -44,9 +47,8 @@ main = do
 
 readParseCases :: IO ([(FilePath, Text)], [(FilePath, Text)])
 readParseCases = do
-  let isCaseA = (== 'A') . last . takeBaseName
-  oks <- readDhallCasesPred isCaseA ( "parser" </> "success" )
-  kos <- readDhallCasesPred ( not . skipTest ) ( "parser" </> "failure" )
+  oks <- readDhallCasesPred isTestCaseA ( "parser" </> "success" )
+  kos <- readDhallCases ( "parser" </> "failure" )
   return (oks, kos)
 
 readImportCases :: IO (([(FilePath, Text)], [(FilePath,Text)])
@@ -61,13 +63,12 @@ readImportCases = do
         relativeCases = ["relative", "fieldOrderA", "issue553B" ]
 
 readNormalizationCases :: IO [(FilePath, Text)]
-readNormalizationCases = do
-  let isCaseA = (== 'A') . last . takeBaseName
-  readDhallCasesPred isCaseA ( "normalization" </> "success" )
+readNormalizationCases = 
+  readDhallCasesPred isTestCaseA ( "normalization" </> "success" )
 
 readTypeCheckCases :: IO ([(FilePath, Text)], [(FilePath, Text)])
 readTypeCheckCases = do
-  oks <- readDhallCases $ "typecheck" </> "success"
+  oks <- readDhallCasesPred isTestCaseA $ "typecheck" </> "success"
   kos <- readDhallCases $ "typecheck" </> "failure"
   return (oks, kos)
 
@@ -85,7 +86,8 @@ readSelfCases relDir =
 
 readCases :: ( FilePath -> Bool ) -> FilePath -> IO [(FilePath, Text)]
 readCases pred dir = do
-  let pred' path = takeExtension path == ".dhall" && pred path  
+  let pred' path = takeExtension path == ".dhall"
+                   && pred path && not ( skipTest path )
   exists <- doesDirectoryExist dir
   when (not exists) $
     error $ "Dhall haskell tests cases dir not exist: " ++ dir

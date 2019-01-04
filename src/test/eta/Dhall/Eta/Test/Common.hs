@@ -36,7 +36,10 @@ skipTest path =
   takeBaseName path `elem` [ "annotation"
                            , "missingSpace"
                            , "spaceAfterListAppend"
-                           ]
+                           , "duplicateFields"]
+
+isTestCaseA :: FilePath -> Bool
+isTestCaseA = (== 'A') . last . takeBaseName
 
 parseOrThrow :: Text
              -> IO ( Dhall.Expr Dhall.Src Dhall.Import, JExpr JSrc JImport )
