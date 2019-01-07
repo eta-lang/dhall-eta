@@ -204,6 +204,24 @@ foreign export java "@static org.dhall.eta.Input.bigDecimal" inputBigDecimal
 inputBigDecimal :: JString -> IO BigDecimal
 inputBigDecimal = dhallInput dhallBigDecimal
 
+-- Double
+
+dhallDouble :: Dhall.Type JDouble
+dhallDouble = fmap toJava Dhall.double
+
+foreign export java "@static org.dhall.eta.Types.doubleDecimal" doubleDecimal
+  :: JType JDouble
+
+doubleDecimal :: JType JDouble
+doubleDecimal = toJava dhallDouble
+
+foreign export java "@static org.dhall.eta.Input.doubleDecimal" inputDoubleDecimal
+  :: JString -> IO JDouble
+
+inputDoubleDecimal :: JString -> IO JDouble
+inputDoubleDecimal = dhallInput dhallDouble
+
+
 optional :: forall a. (Class a) => JType a -> JType (Optional a)
 optional jty = toJava optty
   where ty :: Dhall.Type a = fromJava jty
