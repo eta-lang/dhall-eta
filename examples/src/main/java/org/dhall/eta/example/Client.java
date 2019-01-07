@@ -42,7 +42,10 @@ public class Client {
         System.out.println(Input.str("let str=\"dhall\" in \"Hello ${str}\""));
         System.out.println(Input.bigInt("+1234567"));
         System.out.println(Input.natural("2 * 3 + 4"));
-        System.out.println(Input.bigDecimal("2.001"));
+        System.out.println(Input.bigDecimal("1e100"));
+        System.out.println(Input.bigDecimal("0.0001"));
+        System.out.println(Input.doubleDecimal("Infinity"));
+        System.out.println(Input.doubleDecimal("0.0002"));
         System.out.println("-----------------------------");
 
         Either<ParseError,Expr<Src,Import>> parsed = Parser.exprFromText("example","1");
