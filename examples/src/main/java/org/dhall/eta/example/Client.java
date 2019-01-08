@@ -26,7 +26,7 @@ import org.dhall.eta.Types;
 import org.dhall.eta.Binary;
 import org.dhall.eta.Core;
 
-import org.haskell.types.*;
+import org.dhall.common.types.*;
 
 public class Client {
 
