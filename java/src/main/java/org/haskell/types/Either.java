@@ -22,8 +22,8 @@ public abstract class Either<L, R> {
 	public static class Matcher<L,R,T> implements Function<Either<L,R>, T> {
 		private Function<Left<L,R>,T> left;
 		private Function<Right<L,R>,T> right;
-		private final Function<Either<L,R>,T> _any;
-		public Matcher(Function<Either<L, R>, T> _any) {
+		private final Function<? super Either<L,R>,T> _any;
+		public Matcher(Function<? super Either<L, R>, T> _any) {
 			super();
 			this._any = _any;
 		}
