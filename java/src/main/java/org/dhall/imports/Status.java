@@ -4,10 +4,10 @@ import java.util.Map;
 
 import org.dhall.Context;
 import org.dhall.StandardVersion;
+import org.dhall.common.types.NonEmptyArrayList;
 import org.dhall.core.Expr;
 import org.dhall.core.Import;
 import org.dhall.parser.Src;
-import org.haskell.types.NonEmptyArrayList;
 
 public class Status {
 	private final NonEmptyArrayList<Import> stack;

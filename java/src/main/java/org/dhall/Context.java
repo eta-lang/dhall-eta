@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.haskell.types.Pair;
+import org.dhall.common.types.Pair;
 
 public class Context<A> {
 	

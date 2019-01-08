@@ -3,7 +3,7 @@
  */
 package org.dhall.eta;
 
-import org.haskell.types.Pair;
+import org.dhall.common.types.Pair;
 
 /**
  * @author Javier Neira Sanchez

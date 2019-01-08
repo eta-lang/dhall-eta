@@ -1,8 +1,8 @@
 package org.dhall.core.expr;
 
+import org.dhall.common.types.NonEmptyArrayList;
 import org.dhall.core.Binding;
 import org.dhall.core.Expr;
-import org.haskell.types.NonEmptyArrayList;
 
 public final class ExprLet<S, A> extends Expr<S, A> {
 	

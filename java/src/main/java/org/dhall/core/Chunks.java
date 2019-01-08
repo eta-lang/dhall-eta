@@ -3,7 +3,7 @@ package org.dhall.core;
 import java.util.List;
 import java.util.function.Function;
 
-import org.haskell.types.Pair;
+import org.dhall.common.types.Pair;
 
 public class Chunks<S,A> {
     

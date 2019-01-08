@@ -32,7 +32,7 @@ instance {-# OVERLAPPABLE #-} (ja <: Object) => JavaConverter ja ja where
   toJava = id
   fromJava = id
 
-data JNatural = JNatural @org.haskell.types.Natural
+data JNatural = JNatural @org.dhall.common.types.Natural
    deriving (Class,Show,Eq)
 
 foreign import java unsafe "@new" newNatural  :: JString -> JNatural
@@ -69,16 +69,16 @@ instance JavaConverter Double BigDecimal where
   toJava d = newBigDecimal $ toJava $ show d
   fromJava jd = read $ fromJava $ bigDecimalStr jd
 
-data JEither l r = JEither (@org.haskell.types.Either l r)
+data JEither l r = JEither (@org.dhall.common.types.Either l r)
  deriving (Class,Show,Eq)
 
-foreign import java unsafe "@static org.haskell.types.Either.left"
+foreign import java unsafe "@static org.dhall.common.types.Either.left"
   left :: (l <: Object, r <: Object) => l -> JEither l r
 
-foreign import java unsafe "@static org.haskell.types.Either.right"
+foreign import java unsafe "@static org.dhall.common.types.Either.right"
   right :: (l <: Object, r <: Object) => r -> JEither l r
 
-data JLeft l r = JLeft (@org.haskell.types.either.Left l r)
+data JLeft l r = JLeft (@org.dhall.common.types.either.Left l r)
  deriving (Class,Show,Eq)
 
 type instance Inherits (JLeft l r) = '[JEither l r]
@@ -86,7 +86,7 @@ type instance Inherits (JLeft l r) = '[JEither l r]
 foreign import java unsafe "getValue"
   jleftValue :: (l <: Object, r <: Object) => JLeft l r -> l
 
-data JRight l r = JRight (@org.haskell.types.either.Right l r)
+data JRight l r = JRight (@org.dhall.common.types.either.Right l r)
  deriving (Class,Show,Eq)
 
 type instance Inherits (JRight l r) = '[JEither l r]
@@ -157,10 +157,10 @@ instance (Class j) => JavaConverter (Maybe j) (Optional j) where
   fromJava opt | optIsPresent opt = Just (optGet opt)
                | otherwise        = Nothing
 
-data Pair a b = Pair (@org.haskell.types.Pair a b)
+data Pair a b = Pair (@org.dhall.common.types.Pair a b)
   deriving (Class,Show,Eq)
 
-foreign import java unsafe "@static org.haskell.types.Pair.of"
+foreign import java unsafe "@static org.dhall.common.types.Pair.of"
   newPair :: (f <: Object, s <:Object) => f -> s -> Pair f s
 
 foreign import java unsafe "getFst"
@@ -205,12 +205,12 @@ instance (Ord j, Class j) => JavaConverter (Data.Set.Set j) (Set j) where
   toJava set = toJava $ Data.Set.toList set
   fromJava jset = Data.Set.fromList $ fromJava jset
     
-data JNonEmptyArrayList e = JNonEmptyArrayList (@org.haskell.types.NonEmptyArrayList e)
+data JNonEmptyArrayList e = JNonEmptyArrayList (@org.dhall.common.types.NonEmptyArrayList e)
   deriving (Class,Show,Eq)
 
 type instance Inherits (JNonEmptyArrayList e) = '[List e]
 
-foreign import java unsafe "@static org.haskell.types.NonEmptyArrayList.of"
+foreign import java unsafe "@static org.dhall.common.types.NonEmptyArrayList.of"
   newNonEmptyArrayList :: (e <: Object) => List e -> JNonEmptyArrayList e
 
 instance (Class j, DeepToJava t j)
@@ -273,10 +273,10 @@ instance (Class ja, Class jb)
   fromJava jf = apply
     where apply ja = unsafePerformJavaWith jf $ applyFunction ja
  
-data JUnit = JUnit @org.haskell.types.Unit
+data JUnit = JUnit @org.dhall.common.types.Unit
    deriving (Class,Show,Eq)
 
-foreign import java unsafe "@static @field org.haskell.types.Unit.instance"
+foreign import java unsafe "@static @field org.dhall.common.types.Unit.instance"
   unit :: JUnit
 
 instance JavaConverter () JUnit where
@@ -310,7 +310,7 @@ jcombine _ jx jy = jz
         z  :: s   = x <> y
         jz :: js = toJava z
 
-data JIdentity a = JIdentity (@org.haskell.types.functor.Identity a)
+data JIdentity a = JIdentity (@org.dhall.common.types.functor.Identity a)
    deriving (Class,Show,Eq)
 
 foreign import java unsafe "@new" newIdentity  :: (a <: Object)

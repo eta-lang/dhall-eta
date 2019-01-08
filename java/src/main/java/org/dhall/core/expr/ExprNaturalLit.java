@@ -1,7 +1,7 @@
 package org.dhall.core.expr;
 
+import org.dhall.common.types.Natural;
 import org.dhall.core.Expr;
-import org.haskell.types.Natural;
 
 public final class ExprNaturalLit<S,A> extends Expr<S, A> implements Literal<Natural> {
 	final Natural nat;

@@ -1,9 +1,9 @@
-package org.haskell.types;
+package org.dhall.common.types;
 
 import java.util.function.Function;
 
-import org.haskell.types.either.Left;
-import org.haskell.types.either.Right;
+import org.dhall.common.types.either.Left;
+import org.dhall.common.types.either.Right;
 
 public abstract class Either<L, R> {
 	

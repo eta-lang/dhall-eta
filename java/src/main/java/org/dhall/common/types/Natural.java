@@ -1,4 +1,4 @@
-package org.haskell.types;
+package org.dhall.common.types;
 
 import java.math.BigInteger;
 

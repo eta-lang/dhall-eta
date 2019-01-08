@@ -1,6 +1,6 @@
 package org.dhall.core;
 
-import org.haskell.types.Pair;
+import org.dhall.common.types.Pair;
 
 public final class Var extends Pair<String, Integer>{
 

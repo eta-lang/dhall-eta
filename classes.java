@@ -10,6 +10,14 @@ java/src/main/java/org/dhall/binary/DecodingFailure.java
 java/src/main/java/org/dhall/binary/decoding/failure/CannotDecodeVersionString.java
 java/src/main/java/org/dhall/binary/decoding/failure/CBORIsNotDhall.java
 java/src/main/java/org/dhall/binary/decoding/failure/UnsupportedVersionString.java
+java/src/main/java/org/dhall/common/types/Either.java
+java/src/main/java/org/dhall/common/types/Natural.java
+java/src/main/java/org/dhall/common/types/NonEmptyArrayList.java
+java/src/main/java/org/dhall/common/types/Pair.java
+java/src/main/java/org/dhall/common/types/Unit.java
+java/src/main/java/org/dhall/common/types/either/Left.java
+java/src/main/java/org/dhall/common/types/either/Right.java
+java/src/main/java/org/dhall/common/types/functor/Identity.java
 java/src/main/java/org/dhall/core/Binding.java
 java/src/main/java/org/dhall/core/Chunks.java
 java/src/main/java/org/dhall/core/Const.java
@@ -170,11 +178,4 @@ java/src/main/java/org/dhall/typecheck/message/TypeMismatch.java
 java/src/main/java/org/dhall/typecheck/message/UnboundVariable.java
 java/src/main/java/org/dhall/typecheck/message/Untyped.java
 java/src/main/java/org/dhall/typecheck/message/UnusedHandler.java
-java/src/main/java/org/haskell/types/Either.java
-java/src/main/java/org/haskell/types/Natural.java
-java/src/main/java/org/haskell/types/NonEmptyArrayList.java
-java/src/main/java/org/haskell/types/Pair.java
-java/src/main/java/org/haskell/types/Unit.java
-java/src/main/java/org/haskell/types/either/Left.java
-java/src/main/java/org/haskell/types/either/Right.java
-java/src/main/java/org/haskell/types/functor/Identity.java
+

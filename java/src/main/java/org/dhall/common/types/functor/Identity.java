@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.haskell.types.functor;
+package org.dhall.common.types.functor;
 
 /**
  * @author Javier Neira Sanchez

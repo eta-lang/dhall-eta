@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.haskell.types;
+package org.dhall.common.types;
 
 import java.util.ArrayList;
 import java.util.Arrays;

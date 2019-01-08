@@ -1,6 +1,6 @@
-package org.haskell.types.either;
+package org.dhall.common.types.either;
 
-import org.haskell.types.Either;
+import org.dhall.common.types.Either;
 
 public final class Left<L,R> extends Either<L,R> {
 	private final L value;
