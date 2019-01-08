@@ -39,6 +39,8 @@ importShouldBeEqual successAssert errorAssert ( path, txt ) =
   testCase ( "Importing " ++ takeBaseName path )
   ( do
       (expr, jexpr) <- parseOrThrow txt
+      -- To save the cache file and make both resolutions exactly equal
+      _ <- resolve (expr, jexpr)
       (rexpr, rjexpr) <- resolve (expr, jexpr) 
       case (rexpr, rjexpr) of
         (Left  _,    Left _)      -> errorAssert
