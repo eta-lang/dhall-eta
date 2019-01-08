@@ -39,6 +39,7 @@ importShouldBeEqual successAssert errorAssert ( path, txt ) =
   testCase ( "Importing " ++ takeBaseName path )
   ( do
       (expr, jexpr) <- parseOrThrow txt
+      _ <- resolve (expr, jexpr)
       (rexpr, rjexpr) <- resolve (expr, jexpr) 
       case (rexpr, rjexpr) of
         (Left  _,    Left _)      -> errorAssert
@@ -54,6 +55,7 @@ shouldImportAndBeEqualRelative :: (FilePath, Text) -> TestTree
 shouldImportAndBeEqualRelative ( path, txt ) =
   testCase ( "Importing " ++ takeBaseName path )
   ( do (expr, jexpr) <- parseOrThrow txt
+       _ <- resolveRelative (relativeDir path) (expr, jexpr)
        (rexpr, rjexpr) <- resolveRelative (relativeDir path) (expr, jexpr)
        case (rexpr, rjexpr) of
          (Left  ex,    Left _)      ->
