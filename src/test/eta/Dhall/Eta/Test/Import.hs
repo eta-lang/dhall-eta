@@ -46,9 +46,9 @@ importShouldBeEqual successAssert errorAssert ( path, txt ) =
         (Left  _,    Right _)     -> fail "Dhall import failed but Dhall.Eta one didn't."
         (Right _,    Left _)      -> fail "Dhall import succeded but Dhall.Eta one didn't."
         (Right expr, Right jexpr) -> successAssert >>
-          if expr == fromJava jexpr then return ()
-          else fail $ "Importing is not equal between Dhall and Dhall.Eta."
-          
+          assertEqual
+            ( "Importing is not equal between Dhall and Dhall.Eta." )
+            expr ( fromJava jexpr )
   )
 
 shouldImportAndBeEqualRelative :: (FilePath, Text) -> TestTree
