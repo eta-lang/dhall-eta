@@ -1,11 +1,11 @@
 package org.dhall.eta.example;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.dhall.eta.RecordType;
 import org.dhall.eta.TagValue;
@@ -30,121 +30,133 @@ import org.dhall.common.types.*;
 
 public class Client {
 
+	public static void prn(Object s) {
+		System.out.println(s);
+	}
+	
+	public static void prn() {
+		System.out.println();
+	}
+	
     public static void main (String[] args) {
-        System.out.println("Testing dhall input");
-        System.out.println(Input.bool("True"));
-        System.out.println(Input.bool("True && False"));
+    	System.out.println("Dhall input examples");
+        prn("====================");
+        prn();
+        prn("Simple types shorthands");
+        prn("-----------------------");
+        prn(Input.bool("True"));
+        prn(Input.str("let str=\"dhall\" in \"Hello ${str}\""));
+        prn(Input.bigInt("+1234567"));
+        prn(Input.natural("2 * 3 + 4"));
+        prn(Input.bigDecimal("1e100"));
+        prn(Input.bigDecimal("0.0001"));
+        prn(Input.doubleDecimal("Infinity"));
+        prn(Input.doubleDecimal("0.0002"));
+        prn();
+        prn("Generic input method");
+        prn("--------------------");
+        prn(Input.type(Types.bool(), "True && False"));
+        prn();
+        prn("Standard compound types");
+        prn("-----------------------");
+        prn(Input.type(Types.list(Types.natural()), "[1, 2, 3, 4]"));
+        prn(Input.type(Types.optional(Types.bigDecimal()), "Some 0.1"));
+        prn(Input.type(Types.pair(Types.natural(), Types.bool()), 
+        		"{ _1 = 42, _2 = False }"));
+        prn(Input.type(Types.map(Arrays.asList("key","value"), Types.str()),
+        		"{ key = \"key\", value = \"value\" }"));
+        Map<String,Type<Object>> typeMap=new HashMap<>();
+        typeMap.put("name",asObjTy(Types.str()));
+        typeMap.put("nats",asObjTy(Types.list(Types.natural())));
+        prn(Input.type(Types.mapObj(typeMap), 
+        		"{ name = \"name\", nats=[1, 2, 3] }"));
+        prn();
+        prn("Error in input throws an exception");
         try {
-            System.out.println(Input.bool("1"));
+            prn(Input.bool("1"));
         } catch (Exception e) {
-            System.out.println(e.getLocalizedMessage());
+            prn(e.getLocalizedMessage());
         }
-        System.out.println(Input.str("let str=\"dhall\" in \"Hello ${str}\""));
-        System.out.println(Input.bigInt("+1234567"));
-        System.out.println(Input.natural("2 * 3 + 4"));
-        System.out.println(Input.bigDecimal("1e100"));
-        System.out.println(Input.bigDecimal("0.0001"));
-        System.out.println(Input.doubleDecimal("Infinity"));
-        System.out.println(Input.doubleDecimal("0.0002"));
-        System.out.println("-----------------------------");
-
+        prn();
+        prn("User defined types");
+        prn("------------------");
+        prn("Dhall record to java class:");
+        Project project = Input.type(Types.record(new ProjectType()),
+        		"{ name = \"dhall\", description = \"desc\", stars = 123 }");
+        prn(project);
+        prn();
+        prn("Dhall union to java enum:");
+        String petDhall = "let Pet = constructors < Cat : Text | Dog : Text > in Pet.Cat \"Tom\"";
+        Pet pet = Input.type(Types.union(new PetType()),petDhall);
+        prn(pet);
+        prn();
+        prn("Parser/Core/Import/Typecheck API");
+        prn("===========");
+        
         Either<ParseError,Expr<Src,Import>> parsed = Parser.exprFromText("example","1");
-        System.out.println("Parsing \"1\":");
-        System.out.println(parsed);
-        System.out.println("-----------------------------");
-
+        prn("Parsing \"1\":");
+        prn(parsed);
+        prn();
         Either<ParseError,Expr<Src,Import>> eParsedFun = 
         		Parser.exprFromText("example","\\ (t : Text) -> 1");
-        System.out.println("Parsing \"λ (t : Text) -> 1\":");
-        System.out.println(eParsedFun);
-        System.out.println("-----------------------------");
+        prn("Parsing \"λ (t : Text) -> 1\":");
+        prn(eParsedFun);
+        prn();
         
         Either.Matcher<ParseError, Expr<Src,Import>, Expr<Src,Import>> matcher = 
         		new Either.Matcher<>(any -> null);
         matcher.Right(r -> r.getValue());
         Expr<Src,Import> parsedFun =  matcher.match(eParsedFun);
-        System.out.println("Pretty printing parsed fun");
-        System.out.println(Core.pretty(parsedFun));
-        System.out.println("-----------------------------");
-        
+        prn("Pretty printing parsed fun");
+        prn(Core.pretty(parsedFun));
         Expr<Void,Import> norm = Core.normalizeUnresolved(parsedFun);
-        System.out.println("Normalize fun");
-        System.out.println(norm);
-        System.out.println("-----------------------------");
-        
+        prn("Normalize fun");
+        prn(norm);
         Expr<Void,Import> alphaNorm = Core.alphaNormalizeUnresolved(norm);
-        System.out.println("Alpha normalize fun");
-        System.out.println(alphaNorm);
-        System.out.println("-----------------------------");
-        
+        prn("Alpha normalize fun");
+        prn(alphaNorm);
         Expr<Src,Void> importedExpr = new ExprIntegerShow<>();
         Either<TypeError<Src, Void>,Expr<Src,Void>> checked = 
             TypeCheck.typeOfResolved(importedExpr);
-        System.out.println("Type of ExprIntegerShow");
-        System.out.println(checked);
-        System.out.println("-----------------------------");
-        
-        System.out.println("Testing pets");
-        String petDhall = "let Pet = constructors < Cat : Text | Dog : Text > in Pet.Cat \"Tom\"";
+        prn("Type of ExprIntegerShow");
+        prn(checked);
+        prn();
+        prn("Compiling pets");
+        prn("==============");
         Either<ParseError,Expr<Src,Import>> eParsedPet = 
-        		Parser.exprFromText("example",petDhall);	
+        		Parser.exprFromText("example", petDhall);	
         Either.Matcher<ParseError, Expr<Src,Import>, Expr<Src,Import>> matcherPet = 
             new Either.Matcher<>(any -> null);
         matcherPet.Right(r -> r.getValue());
         Expr<Src,Import> parsedPet =  matcherPet.match(eParsedPet);
-        System.out.println("Parsing Pet");
-        System.out.println(parsedPet);
+        prn("Parsing:");
+        prn(parsedPet);
         Expr<Void,Import> denotedPet=Core.denote(parsedPet);
-        System.out.println("Denoted Pet");
-        System.out.println(denotedPet);
-        Expr<Src,Void> importedPet = org.dhall.eta.Import.load(parsedPet);
-        System.out.println("Imported Pet");
-        System.out.println(importedPet);
+        prn("Denoting:");
+        prn(denotedPet);
+        Expr<Src,Void> loadedPet = org.dhall.eta.Import.load(parsedPet);
+        prn("Loading:");
+        prn(loadedPet);
         Either<TypeError<Src, Void>,Expr<Src,Void>> checkedPet = 
-            TypeCheck.typeOfResolved(importedPet);
-        System.out.println("Checked Pet");
-        System.out.println(checkedPet);
-        Expr<Void, Void> normPet = Core.normalizeResolved(importedPet);
-        System.out.println("Beta Normalized Pet");
-        System.out.println(normPet);
+            TypeCheck.typeOfResolved(loadedPet);
+        prn("Type checking:");
+        prn(checkedPet);
+        Expr<Void, Void> normPet = Core.normalizeResolved(loadedPet);
+        prn("Beta Normalizing:");
+        prn(normPet);
         Expr<Void,Void> alphaNormPet = Core.alphaNormalizeResolved(normPet);
-        System.out.println("Alpha Normalized Pet");
-        System.out.println(alphaNormPet);
-        
-        System.out.println("-----------------------------");
+        prn("Alpha Normalizing:");
+        prn(alphaNormPet);
+        prn();
 
-        System.out.println("Testing dhall main module");
-        Type<Boolean> tyBool = Types.bool();
-        Boolean bool = Input.type(tyBool, "True");
-        System.out.println(bool);
-        Type<Optional<String>> optStrTy=Types.optional(Types.str());
-        Optional<String> optStrIn = Input.type(optStrTy, "Some \"hello\"");
-        System.out.println(optStrIn);
-        
-        Type<List<Natural>> nsTy = Types.list(Types.natural());
-        List<Natural> ns = Input.type(nsTy, "[1, 2, 3]");
-        System.out.println(ns);
-        
-        Map<String,Type<Object>> mapFieldsTy= new HashMap<>();
-        mapFieldsTy.put("key1", asObjTy(optStrTy));
-        mapFieldsTy.put("key2", asObjTy(nsTy));
-        mapFieldsTy.put("key3", asObjTy(Types.str()));
-        Type<Map<String,Object>> mapTy = Types.mapObj(mapFieldsTy);
-        Map<String,Object> m = Input.type(mapTy, 
-        		"{ key1 = Some \"val1\", key2 = [1, 2, 3], key3 = \"val2\" }");
-        System.out.println(m);
+        prn("Binary API");
+        prn("==========");
         Expr<Unit, Import> expr = new ExprIntegerLit<Unit,Import>(new BigInteger("1"));
-        List<Byte> b = Binary.encodeWithVersion(
-        		StandardVersion.defaultVersion(), expr);
-        System.out.println("Bytes: "+b);
+        List<Byte> b = Binary.encodeWithVersion(StandardVersion.defaultVersion(), expr);
+        prn("Expr encoded: "+expr);
+        prn("Bytes: "+b);
         Either<DecodingFailure,Expr<Unit,Import>> decoded = Binary.decodeWithVersion(b);
-        System.out.println("Expr decoded: "+decoded);
-        Project p = Input.type(Types.record(new ProjectType()),
-        		"{ name = \"dhall\", description = \"desc\", stars = 123 }");
-        System.out.println(p);
-        Pet pet = Input.type(Types.union(new PetType()),petDhall);
-        System.out.println(pet);
-        System.out.println("The end");
+        prn("Expr decoded: "+decoded);
     }
     
     @SuppressWarnings("unchecked")
