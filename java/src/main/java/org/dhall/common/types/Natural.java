@@ -82,7 +82,7 @@ public final class Natural extends Number {
 	
 	@Override
 	public String toString() {
-		return "Natural ["+getValue()+"]";
+		return "Natural["+getValue()+"]";
 	}
 	
 }
