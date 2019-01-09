@@ -66,16 +66,16 @@ jobs:
       - restore_cache:
           key: dhall-eta-gradle-cache-v1-
 
-      - run: gradlew init
+      - run: ./gradlew init
 
-      - run: gradlew build
+      - run: ./gradlew build
 
       - save_cache:
           key: dhall-eta-gradle-cache-v1-{{ checksum "build.gradle" }}
           paths:
             - "~/.gradle"
 
-      - run: gradlew run
+      - run: ./gradlew run
 
             
 workflows:
