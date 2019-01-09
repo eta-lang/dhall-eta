@@ -1,0 +1,7 @@
+-dontoptimize
+-dontobfuscate
+-libraryjars <java.home>/lib/rt.jar
+
+-keep public class org.dhall.** { *; }
+-keep public class org.bouncycastle.** { *; }
+-keep public class org.eta.** { *; }
