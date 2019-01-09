@@ -70,19 +70,10 @@ shadowJar {
 
 import proguard.gradle.ProGuardTask
 
-if (!JavaVersion.current().isJava9Compatible()) {
-  task proJar(type: ProGuardTask) {
-    configuration defaultEtaProguardFile
-    configuration 'proguard.txt'
+task proJar(type: ProGuardTask) {
+  configuration defaultEtaProguardFile
+  configuration 'proguard.txt'
 
-    injars shadowJar.outputs
-    outjars "build/dhall-eta-${project.version}.uber.jar"
-  }
-} else {
-
-  task proJar(type: Copy) {
-    from shadowJar.outputs
-    into 'build'
-    rename { "dhall-eta-${project.version}.uber.jar" }
-  }
+  injars shadowJar.outputs
+  outjars "build/dhall-eta-${project.version}-uber.jar"
 }
