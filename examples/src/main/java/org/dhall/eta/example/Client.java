@@ -63,12 +63,12 @@ public class Client {
         prn(Input.type(Types.optional(Types.bigDecimal()), "Some 0.1"));
         prn(Input.type(Types.pair(Types.natural(), Types.bool()), 
         		"{ _1 = 42, _2 = False }"));
-        prn(Input.type(Types.map(Arrays.asList("key","value"), Types.str()),
+        prn(Input.type(Types.homMap(Arrays.asList("key","value"), Types.str()),
         		"{ key = \"key\", value = \"value\" }"));
         Map<String,Type<Object>> typeMap=new HashMap<>();
         typeMap.put("name",asObjTy(Types.str()));
         typeMap.put("nats",asObjTy(Types.list(Types.natural())));
-        prn(Input.type(Types.mapObj(typeMap), 
+        prn(Input.type(Types.objMap(typeMap), 
         		"{ name = \"name\", nats=[1, 2, 3] }"));
         prn();
         prn("Error in input throws an exception");
@@ -91,7 +91,7 @@ public class Client {
         prn(pet);
         prn();
         prn("Parser/Core/Import/Typecheck API");
-        prn("===========");
+        prn("================================");
         
         Either<ParseError,Expr<Src,Import>> parsed = Parser.exprFromText("example","1");
         prn("Parsing \"1\":");

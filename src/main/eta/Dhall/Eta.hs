@@ -32,8 +32,8 @@ module Dhall.Eta
   , unit
   , pair
   , optional
-  , mapTyped
-  , mapObj
+  , homMap
+  , objMap
   , record
 
 --  , inputType
@@ -258,9 +258,9 @@ foreign export java "@static org.dhall.eta.Types.pair" pair
 
 type DhallExpr =  Dhall.Expr Dhall.Src Dhall.X
 
-mapObj :: forall v. Class v
+objMap :: forall v. Class v
        => Map JString (JType v) -> JType (Map JString v)
-mapObj jfieldsMap = toJava $ Dhall.Type {..}
+objMap jfieldsMap = toJava $ Dhall.Type {..}
   where fields :: [(Text,Dhall.Type v)] =
             map (\ (f,s) -> (fromJava f, fromJava s)) jfields
           where jfields :: [(JString,JType v)] = fromJava jfieldsMap  
@@ -286,19 +286,19 @@ mapObj jfieldsMap = toJava $ Dhall.Type {..}
         expected :: DhallExpr
         expected = Dhall.Record $ fmap Dhall.expected fieldsMap
 
-foreign export java "@static org.dhall.eta.Types.mapObj" mapObj
+foreign export java "@static org.dhall.eta.Types.objMap" objMap
   :: (v <: Object) => Map JString (JType v) -> JType (Map JString v)
 
-mapTyped :: forall v. (Class v)
+homMap :: forall v. (Class v)
     => List JString -> JType v -> JType (Map JString v)
-mapTyped jfields jvalueType = mapObj jfieldsMap
+homMap jfields jvalueType = objMap jfieldsMap
   where fields :: [JString] = fromJava jfields
         jfieldsMap  = unsafePerformJava $ do
             newMap <- newHashMap (length fields)
             newMap <.> ( forM_ fields $ \ f -> put f jvalueType)
             return $ superCast newMap
 
-foreign export java "@static org.dhall.eta.Types.map" mapTyped
+foreign export java "@static org.dhall.eta.Types.homMap" homMap
   :: (v <: Object) => List JString -> JType v -> JType (Map JString v)
 
 data JRecordType ja = JRecordType (@org.dhall.eta.RecordType ja)
@@ -315,7 +315,7 @@ foreign import java unsafe "@interface fromFieldsValues"
 record :: forall ja. (Class ja) => JRecordType ja -> JType ja
 record recTy = mkJType jextract' jexpected'
   where mapTy ::  JType (Map JString Object)
-        mapTy = mapObj (unsafePerformJavaWith recTy jrecordTyFieldsTypes)
+        mapTy = objMap (unsafePerformJavaWith recTy jrecordTyFieldsTypes)
 
         jextract' :: JExpr JSrc JX
                   -> Java (JType ja) (Optional ja)
