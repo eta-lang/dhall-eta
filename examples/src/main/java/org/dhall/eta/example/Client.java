@@ -122,7 +122,7 @@ public class Client {
         prn(checked);
         prn();
         prn("Compiling pets");
-        prn("==============");
+        prn("--------------");
         Either<ParseError,Expr<Src,Import>> eParsedPet = 
         		Parser.exprFromText("example", petDhall);	
         Either.Matcher<ParseError, Expr<Src,Import>, Expr<Src,Import>> matcherPet = 
@@ -135,7 +135,7 @@ public class Client {
         prn("Denoting:");
         prn(denotedPet);
         Expr<Src,Void> loadedPet = org.dhall.eta.Import.load(parsedPet);
-        prn("Loading:");
+        prn("Resolving imports:");
         prn(loadedPet);
         Either<TypeError<Src, Void>,Expr<Src,Void>> checkedPet = 
             TypeCheck.typeOfResolved(loadedPet);
