@@ -1,3 +1,4 @@
+src/main/java/org/dhall/eta/FieldTypes.java
 src/main/java/org/dhall/eta/InputType.java
 src/main/java/org/dhall/eta/RecordType.java
 src/main/java/org/dhall/eta/TagValue.java

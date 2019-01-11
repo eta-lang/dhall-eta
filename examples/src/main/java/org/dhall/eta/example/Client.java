@@ -10,6 +10,7 @@ import java.util.Map;
 import org.dhall.eta.RecordType;
 import org.dhall.eta.TagValue;
 import org.dhall.eta.Type;
+import org.dhall.eta.FieldTypes;
 import org.dhall.eta.UnionType;
 import org.dhall.StandardVersion;
 import org.dhall.binary.DecodingFailure;
@@ -27,16 +28,19 @@ import org.dhall.eta.Binary;
 import org.dhall.eta.Core;
 
 import org.dhall.common.types.*;
-
+/**
+ * @author Javier Neira Sanchez
+ *
+ */
 public class Client {
 
-	public static void prn(Object s) {
-		System.out.println(s);
-	}
+    public static void prn(Object s) {
+        System.out.println(s);
+    }
 	
-	public static void prn() {
-		System.out.println();
-	}
+    public static void prn() {
+        System.out.println();
+    }
 	
     public static void main (String[] args) {
     	System.out.println("Dhall input examples");
@@ -65,10 +69,10 @@ public class Client {
         		"{ _1 = 42, _2 = False }"));
         prn(Input.type(Types.homMap(Arrays.asList("key","value"), Types.str()),
         		"{ key = \"key\", value = \"value\" }"));
-        Map<String,Type<Object>> typeMap=new HashMap<>();
-        typeMap.put("name",asObjTy(Types.str()));
-        typeMap.put("nats",asObjTy(Types.list(Types.natural())));
-        prn(Input.type(Types.objMap(typeMap), 
+        Map<String,Type<? extends Object>> fieldTypes=new HashMap<>();
+        fieldTypes.put("name",Types.str());
+        fieldTypes.put("nats",Types.list(Types.natural()));
+        prn(Input.type(Types.objMap(FieldTypes.upcast(fieldTypes)), 
         		"{ name = \"name\", nats=[1, 2, 3] }"));
         prn();
         prn("Error in input throws an exception");
@@ -157,11 +161,6 @@ public class Client {
         prn("Bytes: "+b);
         Either<DecodingFailure,Expr<Unit,Import>> decoded = Binary.decodeWithVersion(b);
         prn("Expr decoded: "+decoded);
-    }
-    
-    @SuppressWarnings("unchecked")
-    public static <A> Type<Object> asObjTy(Type<A> type) {
-        return (Type<Object>) type;
     }
     
     public static class Project {
