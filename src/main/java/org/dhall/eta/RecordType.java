@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.dhall.eta;
 
 import java.util.Map;

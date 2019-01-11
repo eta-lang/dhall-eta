@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.dhall.eta;
 
 import org.dhall.common.types.Pair;
