@@ -43,7 +43,7 @@ compileEta {
 project.version = '0.1.0'
 
 dependencies {
-  compile project(':java')
+  compile project(':dhall-model')
   compile ('org.bouncycastle:bcprov-jdk15on:1.59')
 
   compile eta('base:[4.5,5[')
@@ -75,5 +75,4 @@ task proJar(type: ProGuardTask) {
   configuration 'proguard.txt'
 
   injars shadowJar.outputs
-  outjars "build/dhall-eta-${project.version}-uber.jar"
 }

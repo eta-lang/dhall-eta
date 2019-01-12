@@ -1,2 +1,5 @@
-include 'java', 'examples'
+include 'dhall-model', 'dhall-eta-examples'
 rootProject.name = 'dhall-eta'
+
+project(":dhall-model").projectDir = file("java")
+project(":dhall-eta-examples").projectDir = file("examples")
