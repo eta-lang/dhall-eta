@@ -66,14 +66,14 @@ public class Client {
         prn(Input.type(Types.list(Types.natural()), "[1, 2, 3, 4]"));
         prn(Input.type(Types.optional(Types.bigDecimal()), "Some 0.1"));
         prn(Input.type(Types.pair(Types.natural(), Types.bool()), 
-        		"{ _1 = 42, _2 = False }"));
+                       "{ _1 = 42, _2 = False }"));
         prn(Input.type(Types.homMap(Arrays.asList("key","value"), Types.str()),
-        		"{ key = \"key\", value = \"value\" }"));
+                       "{ key = \"key\", value = \"value\" }"));
         Map<String,Type<? extends Object>> fieldTypes=new HashMap<>();
         fieldTypes.put("name",Types.str());
         fieldTypes.put("nats",Types.list(Types.natural()));
         prn(Input.type(Types.objMap(FieldTypes.upcast(fieldTypes)), 
-        		"{ name = \"name\", nats=[1, 2, 3] }"));
+                       "{ name = \"name\", nats=[1, 2, 3] }"));
         prn();
         prn("Error in input throws an exception");
         try {
@@ -85,8 +85,9 @@ public class Client {
         prn("User defined types");
         prn("------------------");
         prn("Dhall record to java class:");
-        Project project = Input.type(Types.record(new ProjectType()),
-        		"{ name = \"dhall\", description = \"desc\", stars = 123 }");
+        Project project =
+            Input.type(Types.record(new ProjectType()),
+                       "{ name = \"dhall\", description = \"desc\", stars = 123 }");
         prn(project);
         prn();
         prn("Dhall union to java enum:");
@@ -97,18 +98,19 @@ public class Client {
         prn("Parser/Core/Import/Typecheck API");
         prn("================================");
         
-        Either<ParseError,Expr<Src,Import>> parsed = Parser.exprFromText("example","1");
+        Either<ParseError,Expr<Src,Import>> parsed =
+            Parser.exprFromText("example","1");
         prn("Parsing \"1\":");
         prn(parsed);
         prn();
         Either<ParseError,Expr<Src,Import>> eParsedFun = 
-        		Parser.exprFromText("example","\\ (t : Text) -> 1");
+            Parser.exprFromText("example","\\ (t : Text) -> 1");
         prn("Parsing \"λ (t : Text) -> 1\":");
         prn(eParsedFun);
         prn();
         
         Either.Matcher<ParseError, Expr<Src,Import>, Expr<Src,Import>> matcher = 
-        		new Either.Matcher<>(any -> null);
+            new Either.Matcher<>(any -> null);
         matcher.Right(r -> r.getValue());
         Expr<Src,Import> parsedFun =  matcher.match(eParsedFun);
         prn("Pretty printing parsed fun");
@@ -128,7 +130,7 @@ public class Client {
         prn("Compiling pets");
         prn("--------------");
         Either<ParseError,Expr<Src,Import>> eParsedPet = 
-        		Parser.exprFromText("example", petDhall);	
+            Parser.exprFromText("example", petDhall);	
         Either.Matcher<ParseError, Expr<Src,Import>, Expr<Src,Import>> matcherPet = 
             new Either.Matcher<>(any -> null);
         matcherPet.Right(r -> r.getValue());
@@ -155,11 +157,14 @@ public class Client {
 
         prn("Binary API");
         prn("==========");
-        Expr<Unit, Import> expr = new ExprIntegerLit<Unit,Import>(new BigInteger("1"));
-        List<Byte> b = Binary.encodeWithVersion(StandardVersion.defaultVersion(), expr);
+        Expr<Unit, Import> expr =
+            new ExprIntegerLit<Unit,Import>(new BigInteger("1"));
+        List<Byte> b =
+            Binary.encodeWithVersion(StandardVersion.defaultVersion(), expr);
         prn("Expr encoded: "+expr);
         prn("Bytes: "+b);
-        Either<DecodingFailure,Expr<Unit,Import>> decoded = Binary.decodeWithVersion(b);
+        Either<DecodingFailure,Expr<Unit,Import>> decoded =
+            Binary.decodeWithVersion(b);
         prn("Expr decoded: "+decoded);
     }
     
@@ -167,12 +172,14 @@ public class Client {
     	private String name;
     	private String description;
         private Natural stars;
+
         public Project(String name, String description, Natural stars) {
             super();
             this.name = name;
             this.description = description;
             this.stars = stars;
         }
+
         public String getName() {
             return name;
         }
@@ -242,8 +249,6 @@ public class Client {
             }
             return null;
     	}
-    	
-    	
     }
     
     public static class PetType implements UnionType<Pet> {
@@ -265,6 +270,5 @@ public class Client {
                 p.setName((String) tagVal.getValue());
             return p;
         }
-    	
     }
 }
