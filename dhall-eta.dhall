@@ -160,7 +160,7 @@ in    prelude.utils.GitHub-project { owner = "eta-lang", repo = "dhall-eta" }
           )
       , executables =
           [ prelude.unconditional.executable
-            "dhall-eta-example"
+            "dhall-eta-all"
             (   prelude.defaults.Executable
               ⫽ { build-depends =
                     [ deps.base
