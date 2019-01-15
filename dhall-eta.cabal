@@ -9,7 +9,7 @@ name: dhall-eta
 -- source file's name as its argument and redirecting output to
 -- 'dhall-eta.cabal' (this file).
 -- * * * * * * * * * * * * WARNING * * * * * * * * * * * *
-version: 0.1.0
+version: 1.0.0
 cabal-version: 1.12
 build-type: Simple
 license: BSD3
@@ -17,15 +17,44 @@ license-file: LICENSE
 maintainer: atreyu.bbb@gmail.com
 homepage: https://github.com/eta-lang/dhall-eta
 bug-reports: https://github.com/eta-lang/dhall-eta/issues
-synopsis: A wrapper of dhall-haskell to provide a friendly java api over dhall
+synopsis: dhall-eta is a eta library that wraps the haskell implementation of dhall configuration language.
 category: Language
 author: Javier Neira Sánchez <atreyu.bbb@gmail.com>
 extra-source-files:
+    build.gradle
+    dhall-eta.cabal
+    dhall-eta.dhall
+    examples/build.gradle
+    examples/src/main/java/org/dhall/eta/example/*.java
+    gradlew
+    gradlew.bat
+    gradle/wrapper/gradle-wrapper.jar
+    gradle/wrapper/gradle-wrapper.properties
+    java/build.gradle
+    java/src/main/java/org/dhall/*.java
+    java/src/main/java/org/dhall/binary/*.java
+    java/src/main/java/org/dhall/binary/decoding/failure/*.java
+    java/src/main/java/org/dhall/common/types/*.java
+    java/src/main/java/org/dhall/common/types/either/*.java
+    java/src/main/java/org/dhall/common/types/functor/*.java
+    java/src/main/java/org/dhall/core/*.java
+    java/src/main/java/org/dhall/core/constant/*.java
+    java/src/main/java/org/dhall/core/expr/*.java
+    java/src/main/java/org/dhall/core/imports/*.java
+    java/src/main/java/org/dhall/core/imports/hashed/*.java
+    java/src/main/java/org/dhall/core/imports/types/*.java
+    java/src/main/java/org/dhall/core/imports/types/url/*.java
+    proguard.txt
     README.md
+    settings.gradle
+    src/main/java/org/dhall/eta/*.java
+    src/test/resources/import/data/foo/bar/*.dhall
+    src/test/resources/import/success/*.dhall
 
-source-repository head
+source-repository this
     type: git
     location: https://github.com/eta-lang/dhall-eta
+    tag: 1.0.0
 
 library
     exposed-modules:
@@ -67,7 +96,7 @@ library
         Dhall.Eta.Map
     ghc-options: -Wall -fno-warn-safe -fno-warn-unsafe -fno-warn-implicit-prelude -fno-warn-missing-import-lists -fno-warn-missing-local-sigs -fno-warn-monomorphism-restriction -fno-warn-name-shadowing
 
-executable  dhall-eta-example
+executable  dhall-eta-all
     main-is: Main.hs
     build-depends:
         base >=4.5 && <5,

@@ -37,7 +37,7 @@ let deps =
           pkgVer "cryptonite" "0.23" "1.0"
       , dhall =
           pkgVer "dhall" "1.19.1" "1.20"
-      , dhall-eta=
+      , dhall-eta =
           pkg "dhall-eta" prelude.anyVersion
       , directory =
           pkgVer "directory" "1.2.2.0" "1.4"
@@ -89,130 +89,176 @@ let extensions =
       , types.Extension.OverloadedStrings True
       ]
 
-in    prelude.utils.GitHub-project { owner = "eta-lang", repo = "dhall-eta" }
-    ⫽ { synopsis =
-          "A wrapper of dhall-haskell to provide a friendly java api over dhall"
-      , category =
-          "Language"
-      , build-type =
-          Some (types.BuildType.Simple {=})
-      , maintainer =
-          "atreyu.bbb@gmail.com"
-      , author =
-          "Javier Neira Sánchez <atreyu.bbb@gmail.com>"
-      , extra-source-files =
-          [ "README.md" ]
-      , license =
-          types.License.BSD3 {=}
-      , license-files =
-          [ "LICENSE" ]
-      , version =
-          v "0.1.0"
-      , cabal-version =
-          v "1.12"
-      , library =
-          prelude.unconditional.library
-          (   prelude.defaults.Library
-            ⫽ { build-depends =
-                  [ deps.base
-                  , deps.bytestring
-                  , deps.containers
-                  , deps.contravariant
-                  , deps.cryptonite
-                  , deps.dhall
-                  , deps.dotgen
-                  , deps.eta-java-interop
-                  , deps.megaparsec
-                  , deps.memory
-                  , deps.lens
-                  , deps.prettyprinter
-                  , deps.scientific
-                  , deps.serialise
-                  , deps.text
-                  , deps.transformers
-                  ]
-              , compiler-options =
-                  prelude.defaults.CompilerOptions ⫽ { GHC = warning-options }
-              , exposed-modules =
-                  [ "Dhall.Eta"
-                  , "Dhall.Eta.Binary"
-                  , "Dhall.Eta.Context"
-                  , "Dhall.Eta.Core"
-                  , "Dhall.Eta.Core.Java"
-                  , "Dhall.Eta.Import"
-                  , "Dhall.Eta.Parser"
-                  , "Dhall.Eta.Parser.Java"
-                  , "Dhall.Eta.TypeCheck"
-                  , "Dhall.Eta.TypeCheck.Java"
-                  , "Eta.Types"
-                  ]
-              , hs-source-dirs =
-                  [ "src/main/eta" ]
-              , java-sources =
-                  [ "@classes.java" ]
-              , default-extensions =
-                  extensions
-              , other-modules =
-                  [ "Dhall.Eta.Map" ]
-              , default-language =
-                  Haskell2010
-              }
-          )
-      , executables =
-          [ prelude.unconditional.executable
-            "dhall-eta-all"
-            (   prelude.defaults.Executable
+let version = "1.0.0"
+
+let updateRepo =
+      prelude.utils.mapSourceRepos
+      (   λ(srcRepo : types.SourceRepo)
+        → srcRepo ⫽ { tag = Some version, kind = types.RepoKind.RepoThis {=} }
+      )
+
+let project =
+      prelude.utils.GitHub-project { owner = "eta-lang", repo = "dhall-eta" }
+
+in  updateRepo
+    (   project
+      ⫽ { synopsis =
+            "dhall-eta is a eta library that wraps the haskell implementation of dhall configuration language."
+        , description =
+            ""
+        , category =
+            "Language"
+        , build-type =
+            Some (types.BuildType.Simple {=})
+        , maintainer =
+            "atreyu.bbb@gmail.com"
+        , author =
+            "Javier Neira Sánchez <atreyu.bbb@gmail.com>"
+        , extra-source-files =
+            [ "build.gradle"
+-- To make `etlas sdist` wotk we have to uncomment this linme and comment the java-sources
+--            , "classes.java"
+            , "dhall-eta.cabal"
+            , "dhall-eta.dhall"
+            , "examples/build.gradle"
+            , "examples/src/main/java/org/dhall/eta/example/*.java"
+            , "gradlew"
+            , "gradlew.bat"
+            , "gradle/wrapper/gradle-wrapper.jar"
+            , "gradle/wrapper/gradle-wrapper.properties"
+            , "java/build.gradle"
+            , "java/src/main/java/org/dhall/*.java"
+            , "java/src/main/java/org/dhall/binary/*.java"
+            , "java/src/main/java/org/dhall/binary/decoding/failure/*.java"
+            , "java/src/main/java/org/dhall/common/types/*.java"
+            , "java/src/main/java/org/dhall/common/types/either/*.java"
+            , "java/src/main/java/org/dhall/common/types/functor/*.java"
+            , "java/src/main/java/org/dhall/core/*.java"
+            , "java/src/main/java/org/dhall/core/constant/*.java"
+            , "java/src/main/java/org/dhall/core/expr/*.java"
+            , "java/src/main/java/org/dhall/core/imports/*.java"
+            , "java/src/main/java/org/dhall/core/imports/hashed/*.java"
+            , "java/src/main/java/org/dhall/core/imports/types/*.java"
+            , "java/src/main/java/org/dhall/core/imports/types/url/*.java"
+            , "proguard.txt"
+            , "README.md"
+            , "settings.gradle"
+            , "src/main/java/org/dhall/eta/*.java"
+            , "src/test/resources/import/data/foo/bar/*.dhall"
+            , "src/test/resources/import/success/*.dhall"
+            ]
+        , license =
+            types.License.BSD3 {=}
+        , license-files =
+            [ "LICENSE" ]
+        , version =
+            v version
+        , cabal-version =
+            v "1.12"
+        , library =
+            prelude.unconditional.library
+            (   prelude.defaults.Library
               ⫽ { build-depends =
                     [ deps.base
-                    , deps.dhall-eta
-                    ]
-                , compiler-options =
-                    prelude.defaults.CompilerOptions ⫽ { GHC = warning-options }
-                , hs-source-dirs =
-                    [ "examples/src/main/eta" ]
-                , main-is =
-                    "Main.hs"
-                , default-extensions =
-                    extensions
-                , default-language =
-                    Haskell2010
-                }
-            )
-          ]
-      , test-suites =
-          [ prelude.unconditional.test-suite
-            "tasty"
-            (   prelude.defaults.TestSuite
-              ⫽ { type =
-                    types.TestType.exitcode-stdio { main-is = "Dhall/Eta/Test/Main.hs" }
-                , build-depends =
-                    [ deps.base
+                    , deps.bytestring
+                    , deps.containers
+                    , deps.contravariant
+                    , deps.cryptonite
                     , deps.dhall
-                    , deps.dhall-eta
-                    , deps.directory
-                    , deps.filepath
-                    , deps.tasty
-                    , deps.tasty-hunit
+                    , deps.dotgen
+                    , deps.eta-java-interop
+                    , deps.megaparsec
+                    , deps.memory
+                    , deps.lens
+                    , deps.prettyprinter
+                    , deps.scientific
+                    , deps.serialise
                     , deps.text
                     , deps.transformers
                     ]
                 , compiler-options =
                     prelude.defaults.CompilerOptions ⫽ { GHC = warning-options }
+                , exposed-modules =
+                    [ "Dhall.Eta"
+                    , "Dhall.Eta.Binary"
+                    , "Dhall.Eta.Context"
+                    , "Dhall.Eta.Core"
+                    , "Dhall.Eta.Core.Java"
+                    , "Dhall.Eta.Import"
+                    , "Dhall.Eta.Parser"
+                    , "Dhall.Eta.Parser.Java"
+                    , "Dhall.Eta.TypeCheck"
+                    , "Dhall.Eta.TypeCheck.Java"
+                    , "Eta.Types"
+                    ]
+                , hs-source-dirs =
+                    [ "src/main/eta" ]
+                , java-sources =
+                    [ "@classes.java" ]
                 , default-extensions =
                     extensions
-                , hs-source-dirs =
-                    [ "src/test/eta"
-                    ]
                 , other-modules =
-                    [ "Dhall.Eta.Test.Common"
-                    , "Dhall.Eta.Test.Import"
-                    , "Dhall.Eta.Test.Normalization"
-                    , "Dhall.Eta.Test.Parser"
-                    , "Dhall.Eta.Test.TypeCheck"
-                    ]
+                    [ "Dhall.Eta.Map" ]
                 , default-language =
                     Haskell2010
                 }
             )
-          ]
-      }
+        , executables =
+            [ prelude.unconditional.executable
+              "dhall-eta-all"
+              (   prelude.defaults.Executable
+                ⫽ { build-depends =
+                      [ deps.base, deps.dhall-eta ]
+                  , compiler-options =
+                        prelude.defaults.CompilerOptions
+                      ⫽ { GHC = warning-options }
+                  , hs-source-dirs =
+                      [ "examples/src/main/eta" ]
+                  , main-is =
+                      "Main.hs"
+                  , default-extensions =
+                      extensions
+                  , default-language =
+                      Haskell2010
+                  }
+              )
+            ]
+        , test-suites =
+            [ prelude.unconditional.test-suite
+              "tasty"
+              (   prelude.defaults.TestSuite
+                ⫽ { type =
+                      types.TestType.exitcode-stdio
+                      { main-is = "Dhall/Eta/Test/Main.hs" }
+                  , build-depends =
+                      [ deps.base
+                      , deps.dhall
+                      , deps.dhall-eta
+                      , deps.directory
+                      , deps.filepath
+                      , deps.tasty
+                      , deps.tasty-hunit
+                      , deps.text
+                      , deps.transformers
+                      ]
+                  , compiler-options =
+                        prelude.defaults.CompilerOptions
+                      ⫽ { GHC = warning-options }
+                  , default-extensions =
+                      extensions
+                  , hs-source-dirs =
+                      [ "src/test/eta" ]
+                  , other-modules =
+                      [ "Dhall.Eta.Test.Common"
+                      , "Dhall.Eta.Test.Import"
+                      , "Dhall.Eta.Test.Normalization"
+                      , "Dhall.Eta.Test.Parser"
+                      , "Dhall.Eta.Test.TypeCheck"
+                      ]
+                  , default-language =
+                      Haskell2010
+                  }
+              )
+            ]
+        }
+    )
