@@ -19,6 +19,7 @@ etlas.sandbox.config
 .gradle/
 cabal.project.local
 cabal.project.local~
+*.local.*
 .HTF/
 .eta.environment.*
 *.class
