@@ -116,8 +116,6 @@ in  updateRepo
             "Javier Neira Sánchez <atreyu.bbb@gmail.com>"
         , extra-source-files =
             [ "build.gradle"
--- To make `etlas sdist` wotk we have to uncomment this linme and comment the java-sources
---            , "classes.java"
             , "dhall-eta.cabal"
             , "dhall-eta.dhall"
             , "examples/build.gradle"
@@ -194,6 +192,7 @@ in  updateRepo
                 , hs-source-dirs =
                     [ "src/main/eta" ]
                 , java-sources =
+                -- To make `etlas sdist` work we have to comment this line and add manually the file to the tarball
                     [ "@classes.java" ]
                 , default-extensions =
                     extensions
