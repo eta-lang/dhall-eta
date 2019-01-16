@@ -1,6 +1,9 @@
 plugins {
   id 'application'
 }
+
+project.version = "1.0.0"
+
  mainClassName = 'org.dhall.eta.example.Client'
 
 dependencies {

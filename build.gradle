@@ -40,7 +40,7 @@ compileEta {
   }
 }
 
-project.version = '0.1.0'
+project.version = '1.0.0'
 
 dependencies {
   compile project(':dhall-model')
