@@ -73,6 +73,7 @@ import proguard.gradle.ProGuardTask
 task proJar(type: ProGuardTask) {
   configuration defaultEtaProguardFile
   configuration 'proguard.txt'
-
+  
   injars shadowJar.outputs
+  outjars "build/lib/dhall-eta-all-${project.version}.jar"
 }
