@@ -41,7 +41,7 @@ be used directly in java code in a easy way. Hence the need for this library.
 ```
 NOTE: The version of java used is [openjdk-9.0.4](https://jdk.java.net/archive/). 
 
-* To use the api in your project simply download from last release the `dhall-eta-all-${version}.jar` and put it in the project classpath.
+* To use the api in your project simply download from last release the [`dhall-eta-all-${version}.jar`](https://github.com/eta-lang/dhall-eta/releases/latest) and put it in the project classpath.
 * The project has an [executable class](./examples/src/main/java/org/dhall/eta/example/Client.java) with some more examples.
 
 ### High level api
