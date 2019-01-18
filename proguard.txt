@@ -1,6 +1,8 @@
+-ignorewarnings
 -dontoptimize
 -dontobfuscate
 -libraryjars <java.home>/lib/rt.jar
+-libraryjars <java.home>/lib/jce.jar
 
 -keep public class org.dhall.** { *; }
 -keep public class org.bouncycastle.** { *; }
