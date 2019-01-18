@@ -9,9 +9,11 @@
 
 [![CircleCI](https://circleci.com/gh/eta-lang/dhall-eta.svg?style=svg)](https://circleci.com/gh/eta-lang/dhall-eta)
 
-`dhall-eta` is a [eta](https://eta-lang.org/) library that wraps the [haskell implementation](https://github.com/dhall-lang/dhall-haskell/tree/master/dhall) of [dhall configuration language](https://dhall-lang.org/).
+`dhall-eta` is a [eta](https://eta-lang.org/) library that wraps the
+[haskell implementation](https://github.com/dhall-lang/dhall-haskell/tree/master/dhall)
+of [dhall configuration language](https://dhall-lang.org/) with a friendly java api.
 
-Its main goal is to provide a friendly java api over the high customizable haskell one, creating a [language binding](https://github.com/dhall-lang/dhall-lang#language-bindings) to make possible configure `java` libraries and applications with `dhall` files.
+Its main goal is to create a [language binding](https://github.com/dhall-lang/dhall-lang#language-bindings) to make possible configure `java` libraries and applications with `dhall` files.
 
 We already can use `eta` to compile the `dhall haskell` implementation
 and [etlas](https://eta-lang.org/docs/user-guides/etlas-user-guide) (a
@@ -39,7 +41,7 @@ be used directly in java code in a easy way. Hence the need for this library.
 ```
 NOTE: The version of java used is [openjdk-9.0.4](https://jdk.java.net/archive/). 
 
-* To use the api in your project simply download from last release the `dhall-eta-${version}-all.jar` and put it in the project classpath.
+* To use the api in your project simply download from last release the `dhall-eta-all-${version}.jar` and put it in the project classpath.
 * The project has an [executable class](./examples/src/main/java/org/dhall/eta/example/Client.java) with some more examples.
 
 ### High level api
@@ -47,7 +49,7 @@ NOTE: The version of java used is [openjdk-9.0.4](https://jdk.java.net/archive/)
 The main class to compile dhall expressions and get java objects is
 the class `org.dhall.eta.Input`.
 
-* The class has methods to compile simple types:
+* The class has methods to compile simple types and convert them to java:
 
 ```java
 jshell> import org.dhall.eta.Input
