@@ -37,7 +37,7 @@ be used directly in java code in a easy way. Hence the need for this library.
 * The quick way to explore the java api is use [`jshell`](https://docs.oracle.com/javase/9/tools/jshell.htm) the java repl tool present since java 9.
   * To start a session with the library in the classpath you can do:
 ```console
-> jshell --class-path /path/to/dhall-eta-${version}-all.jar
+> jshell --class-path /path/to/dhall-eta-all-${version}.jar
 ```
 NOTE: The version of java used is [openjdk-9.0.4](https://jdk.java.net/archive/). 
 
