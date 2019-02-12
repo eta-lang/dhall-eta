@@ -12,14 +12,14 @@ jobs:
     - checkout
 
     - restore_cache:
-        key: dhall-eta-cache-v2-
+        key: dhall-eta-cache-v3-
 
     - run: etlas update
 
     - run: etlas build
 
     - save_cache:
-        key: dhall-eta-cache-v2-{{ checksum "etlas.dhall" }}
+        key: dhall-eta-cache-v3-{{ checksum "etlas.dhall" }}
         paths:
           - "~/.etlas/config"
           - "~/.etlas/packages"
@@ -59,17 +59,17 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: dhall-eta-cache-v2-
+          key: dhall-eta-cache-v3-
       
       - restore_cache:
-          key: dhall-eta-gradle-cache-v1-
+          key: dhall-eta-gradle-cache-v2-
 
       - run: ./gradlew init
 
       - run: ./gradlew build
 
       - save_cache:
-          key: dhall-eta-gradle-cache-v1-{{ checksum "build.gradle" }}
+          key: dhall-eta-gradle-cache-v2-{{ checksum "build.gradle" }}
           paths:
             - "~/.gradle"
 
