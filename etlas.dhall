@@ -1,93 +1,47 @@
 let prelude =
-      https://raw.githubusercontent.com/eta-lang/dhall-to-etlas/etlas/dhall/prelude.dhall sha256:5ba8b5b12d40ba324909d3013c8a57cc71ddf6a8683eb7e2e453cc9338f67a0d
+      https://raw.githubusercontent.com/eta-lang/dhall-to-etlas/etlas/dhall/prelude.dhall sha256:45889a631c526bca2c0a91b9c6d1f815d25f77d6a6785b4f6bdec40bcee6b3a0
 
 let types =
       https://raw.githubusercontent.com/eta-lang/dhall-to-etlas/etlas/dhall/types.dhall sha256:a6c967e2f3af97d621c2ec058822f41527e10d4288bd45b191e3a79f2ab87217
 
-let idx =
-      https://raw.githubusercontent.com/jneira/etlas-index/dhall-deps/dhall/index.dhall sha256:7c97a6d9f20bf2ee2710cff66cea98684a856476eda4402b5a339318d89cd9a9
-
-let idx-types =
-      https://raw.githubusercontent.com/jneira/etlas-index/dhall-deps/dhall/types/package.dhall
-      
-let 
+let default-deps =
+      https://raw.githubusercontent.com/eta-lang/dhall-to-etlas/etlas/dhall/dependencies.dhall sha256:e034fad0030e42d5fb1d21056ced132eaf9ded8adcd84f70bc8eaed0e60b1bfe
 
 let v = prelude.v
 
-let map =
-      https://raw.githubusercontent.com/dhall-lang/dhall-lang/master/Prelude/List/map
+let dep = prelude.Dependency.cons
 
-let idx-pkg
-        : idx-types.IndexedPackage → types.Dependency
-        =   λ(pkg : IndexedPackage)
-          → { package = pkg.name
-            , bounds = prelude.thisVersion (v pkg.lastest)
-            }
-
-let idx-deps =
-      map idx-types.IndeexedPackage types.Dependency idx-pkg idx
-
-let pkg =
-        λ(name : Text)
-      → λ(version-range : types.VersionRange)
-      → { bounds = version-range, package = name }
-
-let pkgVer =
-        λ(packageName : Text)
-      → λ(minor : Text)
-      → λ(major : Text)
-      → pkg
-        packageName
-        ( prelude.intersectVersionRanges
-          (prelude.orLaterVersion (v minor))
-          (prelude.earlierVersion (v major))
-        )
+let pvp = prelude.Dependency.pvp
 
 let deps =
-      idx-deps.{ base, bytestring, contravariant, containers, cryptonite, eta-java-interop, filepath, megaparsec, memory, scientific, serialise, tasty, text, transformers}
-      ⫽  { base =
-          pkgVer "base" "4.5" "5"
-      , bytestring =
-          pkgVer "bytestring" "0.10" "0.11"
-      , contravariant =
-          pkgVer "contravariant" "1.5" "1.6"
-      , containers =
-          pkgVer "containers" "0.5" "0.6"
-      , cryptonite =
-          pkgVer "cryptonite" "0.23" "1.0"
-      , dhall =
-          pkgVer "dhall" "1.19.1" "1.20"
-      , dhall-eta =
-          pkg "dhall-eta" prelude.anyVersion
-      , directory =
-          pkgVer "directory" "1.2.2.0" "1.4"
-      , dotgen =
-          pkgVer "dotgen" "0.4.2" "0.5"
-      , eta-java-interop =
-          pkgVer "eta-java-interop" "0.1.5.0" "0.1.6"
-      , filepath =
-          pkgVer "filepath" "1.4" "1.5"
-      , megaparsec =
-          pkgVer "megaparsec" "6.1.1" "7.1"
-      , memory =
-          pkgVer "memory" "0.14" "0.15"
-      , lens =
-          pkgVer "lens-family-core" "1.0.0" "1.3"
-      , prettyprinter =
-          pkgVer "prettyprinter" "1.2.0.1" "1.3"
-      , scientific =
-          pkgVer "scientific" "0.3.0.0" "0.4"
-      , serialise =
-          pkgVer "serialise" "0.2.0.0" "0.3"
-      , tasty =
-          pkgVer "tasty" "0.11.2" "1.2"
-      , tasty-hunit =
-          pkgVer "tasty-hunit" "0.9.2" "0.11"
-      , text =
-          pkgVer "text" "1.2" "1.3"
-      , transformers =
-          pkgVer "transformers" "0.2.0.0" "0.6"
-      }
+        default-deps.{ base
+                     , bytestring
+                     , contravariant
+                     , containers
+                     , cryptonite
+                     , dhall
+                     , directory
+                     , eta-java-interop
+                     , filepath
+                     , megaparsec
+                     , memory
+                     , scientific
+                     , serialise
+                     , tasty
+                     , text
+                     , transformers
+                     }
+      ⫽ { dhall-eta =
+            dep "dhall-eta" prelude.anyVersion
+        , dotgen =
+            pvp "dotgen" "0.4.2" "0.5"
+        , lens =
+            pvp "lens-family-core" "1.0.0" "1.3"
+        , prettyprinter =
+            pvp "prettyprinter" "1.2.0.1" "1.3"
+        , tasty-hunit =
+            pvp "tasty-hunit" "0.9.2" "0.11"
+        }
 
 let project =
       prelude.utils.GitHubTag-project
