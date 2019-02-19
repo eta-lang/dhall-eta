@@ -15,9 +15,11 @@ let dep = prelude.Dependency.orLater-earlier
 
 let any = prelude.Dependency.any
 
+let projectName = "dhall-eta"
+
 let project =
       prelude.utils.GitHubTag-project
-      { owner = "eta-lang", repo = "dhall-eta", version = "1.0.0" }
+      { owner = "eta-lang", repo = projectName, version = "1.0.0" }
 
 in    project
     ⫽ { synopsis =
@@ -113,7 +115,9 @@ in    project
             "dhall-eta-all"
             (   prelude.defaults.Executable
               ⫽ { build-depends =
-                    [ deps.base, any "dhall-eta" ]
+                    [ deps.base
+                    , any projectName
+                    ]
                 , hs-source-dirs =
                     [ "examples/src/main/eta" ]
                 , main-is =
@@ -138,7 +142,9 @@ in    project
                       , deps.text
                       , deps.transformers
                       ]
-                    # [ any "dhall-eta", dep "tasty-hunit" "0.9.2" "0.11" ]
+                    # [ any projectName
+                      , dep "tasty-hunit" "0.9.2" "0.11"
+                      ]
                 , hs-source-dirs =
                     [ "src/test/eta" ]
                 , other-modules =
