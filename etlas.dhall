@@ -1,47 +1,19 @@
 let prelude =
-      https://raw.githubusercontent.com/eta-lang/dhall-to-etlas/etlas/dhall/prelude.dhall sha256:45889a631c526bca2c0a91b9c6d1f815d25f77d6a6785b4f6bdec40bcee6b3a0
+      https://raw.githubusercontent.com/eta-lang/dhall-to-etlas/etlas/dhall/prelude.dhall sha256:fb9a4c7f9f173e1b51e31599f3cf64267e9cc590a3bd7c5697d2f1df1b171960
 
 let types =
       https://raw.githubusercontent.com/eta-lang/dhall-to-etlas/etlas/dhall/types.dhall sha256:a6c967e2f3af97d621c2ec058822f41527e10d4288bd45b191e3a79f2ab87217
 
-let default-deps =
-      https://raw.githubusercontent.com/eta-lang/dhall-to-etlas/etlas/dhall/dependencies.dhall sha256:e034fad0030e42d5fb1d21056ced132eaf9ded8adcd84f70bc8eaed0e60b1bfe
+let deps =
+        ~/.etlas/packages/etlas.org/dhall/dependencies.dhall
+      ? ~/AppData/Roaming/etlas/packages/etlas.org/dhall/dependencies.dhall
+      ? https://raw.githubusercontent.com/eta-lang/dhall-to-etlas/etlas/dhall/dependencies.dhall sha256:e034fad0030e42d5fb1d21056ced132eaf9ded8adcd84f70bc8eaed0e60b1bfe
 
 let v = prelude.v
 
-let dep = prelude.Dependency.cons
+let dep = prelude.Dependency.orLater-earlier
 
-let pvp = prelude.Dependency.pvp
-
-let deps =
-        default-deps.{ base
-                     , bytestring
-                     , contravariant
-                     , containers
-                     , cryptonite
-                     , dhall
-                     , directory
-                     , eta-java-interop
-                     , filepath
-                     , megaparsec
-                     , memory
-                     , scientific
-                     , serialise
-                     , tasty
-                     , text
-                     , transformers
-                     }
-      ⫽ { dhall-eta =
-            dep "dhall-eta" prelude.anyVersion
-        , dotgen =
-            pvp "dotgen" "0.4.2" "0.5"
-        , lens =
-            pvp "lens-family-core" "1.0.0" "1.3"
-        , prettyprinter =
-            pvp "prettyprinter" "1.2.0.1" "1.3"
-        , tasty-hunit =
-            pvp "tasty-hunit" "0.9.2" "0.11"
-        }
+let any = prelude.Dependency.any
 
 let project =
       prelude.utils.GitHubTag-project
@@ -97,23 +69,24 @@ in    project
           prelude.unconditional.library
           (   prelude.defaults.Library
             ⫽ { build-depends =
-                  [ deps.base
-                  , deps.bytestring
-                  , deps.containers
-                  , deps.contravariant
-                  , deps.cryptonite
-                  , deps.dhall
-                  , deps.dotgen
-                  , deps.eta-java-interop
-                  , deps.megaparsec
-                  , deps.memory
-                  , deps.lens
-                  , deps.prettyprinter
-                  , deps.scientific
-                  , deps.serialise
-                  , deps.text
-                  , deps.transformers
-                  ]
+                    [ deps.base
+                    , deps.bytestring
+                    , deps.containers
+                    , deps.contravariant
+                    , deps.cryptonite
+                    , deps.dhall
+                    , deps.eta-java-interop
+                    , deps.megaparsec
+                    , deps.memory
+                    , deps.scientific
+                    , deps.serialise
+                    , deps.text
+                    , deps.transformers
+                    ]
+                  # [ dep "dotgen" "0.4.2" "0.5"
+                    , dep "lens-family-core" "1.0.0" "1.3"
+                    , dep "prettyprinter" "1.2.0.1" "1.3"
+                    ]
               , exposed-modules =
                   [ "Dhall.Eta"
                   , "Dhall.Eta.Binary"
@@ -140,7 +113,7 @@ in    project
             "dhall-eta-all"
             (   prelude.defaults.Executable
               ⫽ { build-depends =
-                    [ deps.base, deps.dhall-eta ]
+                    [ deps.base, any "dhall-eta" ]
                 , hs-source-dirs =
                     [ "examples/src/main/eta" ]
                 , main-is =
@@ -156,16 +129,16 @@ in    project
                     types.TestType.exitcode-stdio
                     { main-is = "Dhall/Eta/Test/Main.hs" }
                 , build-depends =
-                    [ deps.base
-                    , deps.dhall
-                    , deps.dhall-eta
-                    , deps.directory
-                    , deps.filepath
-                    , deps.tasty
-                    , deps.tasty-hunit
-                    , deps.text
-                    , deps.transformers
-                    ]
+                      [ deps.base
+                      , deps.dhall
+                      , deps.dhall-eta
+                      , deps.directory
+                      , deps.filepath
+                      , deps.tasty
+                      , deps.text
+                      , deps.transformers
+                      ]
+                    # [ any "dhall-eta", dep "tasty-hunit" "0.9.2" "0.11" ]
                 , hs-source-dirs =
                     [ "src/test/eta" ]
                 , other-modules =
