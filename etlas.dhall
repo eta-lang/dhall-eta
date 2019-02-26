@@ -1,17 +1,15 @@
 let prelude =
-      https://raw.githubusercontent.com/eta-lang/dhall-to-etlas/etlas/dhall/prelude.dhall sha256:fb9a4c7f9f173e1b51e31599f3cf64267e9cc590a3bd7c5697d2f1df1b171960
+      https://raw.githubusercontent.com/eta-lang/dhall-to-etlas/etlas/dhall/prelude.dhall sha256:9ae883c3a3691ed57945635e5058979d0523d659d74afd814bd27c93ba05b830
 
 let types =
-      https://raw.githubusercontent.com/eta-lang/dhall-to-etlas/etlas/dhall/types.dhall sha256:a6c967e2f3af97d621c2ec058822f41527e10d4288bd45b191e3a79f2ab87217
+      https://raw.githubusercontent.com/eta-lang/dhall-to-etlas/etlas/dhall/types.dhall sha256:0f312f257aa904a1d9b4065a630783c1544cb8ebe8f30e3efb1899b5e05625f1
 
 let deps =
-        ~/.etlas/packages/etlas.org/dhall/dependencies.dhall
-      ? ~/AppData/Roaming/etlas/packages/etlas.org/dhall/dependencies.dhall
-      ? https://raw.githubusercontent.com/eta-lang/dhall-to-etlas/etlas/dhall/dependencies.dhall sha256:e034fad0030e42d5fb1d21056ced132eaf9ded8adcd84f70bc8eaed0e60b1bfe
+      https://raw.githubusercontent.com/eta-lang/dhall-to-etlas/etlas/dhall/dependencies.dhall sha256:150822c3da46c5a2a624445ad897b266826401a12ac588bd36cc84356a4cbd6d
 
 let v = prelude.v
 
-let dep = prelude.Dependency.orLater-earlier
+let dep = prelude.Dependency.singleInterval
 
 let any = prelude.Dependency.any
 
@@ -85,9 +83,9 @@ in    project
                     , deps.text
                     , deps.transformers
                     ]
-                  # [ dep "dotgen" "0.4.2" "0.5"
-                    , dep "lens-family-core" "1.0.0" "1.3"
-                    , dep "prettyprinter" "1.2.0.1" "1.3"
+                  # [ dep "dotgen" "[0.4.2,0.5)"
+                    , dep "lens-family-core" "[1.0.0,1.3)"
+                    , dep "prettyprinter" "[1.2.0.1,1.3)"
                     ]
               , exposed-modules =
                   [ "Dhall.Eta"
@@ -115,9 +113,7 @@ in    project
             "dhall-eta-all"
             (   prelude.defaults.Executable
               ⫽ { build-depends =
-                    [ deps.base
-                    , any projectName
-                    ]
+                    [ deps.base, any projectName ]
                 , hs-source-dirs =
                     [ "examples/src/main/eta" ]
                 , main-is =
@@ -135,7 +131,6 @@ in    project
                 , build-depends =
                       [ deps.base
                       , deps.dhall
-                      , deps.dhall-eta
                       , deps.directory
                       , deps.filepath
                       , deps.tasty
@@ -143,7 +138,7 @@ in    project
                       , deps.transformers
                       ]
                     # [ any projectName
-                      , dep "tasty-hunit" "0.9.2" "0.11"
+                      , dep "tasty-hunit" "[0.9.2,0.11)"
                       ]
                 , hs-source-dirs =
                     [ "src/test/eta" ]
