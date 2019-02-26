@@ -5,7 +5,7 @@ let types =
       https://raw.githubusercontent.com/eta-lang/dhall-to-etlas/etlas/dhall/types.dhall sha256:0f312f257aa904a1d9b4065a630783c1544cb8ebe8f30e3efb1899b5e05625f1
 
 let deps =
-      https://raw.githubusercontent.com/eta-lang/dhall-to-etlas/etlas/dhall/dependencies.dhall sha256:150822c3da46c5a2a624445ad897b266826401a12ac588bd36cc84356a4cbd6d
+      https://raw.githubusercontent.com/jneira/etlas-index/dhall-deps/dhall/dependencies.dhall sha256:150822c3da46c5a2a624445ad897b266826401a12ac588bd36cc84356a4cbd6d
 
 let v = prelude.v
 
@@ -137,9 +137,7 @@ in    project
                       , deps.text
                       , deps.transformers
                       ]
-                    # [ any projectName
-                      , dep "tasty-hunit" "[0.9.2,0.11)"
-                      ]
+                    # [ any projectName, dep "tasty-hunit" "[0.9.2,0.11)" ]
                 , hs-source-dirs =
                     [ "src/test/eta" ]
                 , other-modules =
