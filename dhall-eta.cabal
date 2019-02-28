@@ -15,6 +15,7 @@ license: BSD3
 license-file: LICENSE
 maintainer: atreyu.bbb@gmail.com
 homepage: https://github.com/eta-lang/dhall-eta
+package-url: https://github.com/eta-lang/dhall-eta
 bug-reports: https://github.com/eta-lang/dhall-eta/issues
 synopsis: dhall-eta is a eta library that wraps the haskell implementation of dhall configuration language.
 category: Language
